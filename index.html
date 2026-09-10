@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Creador de Sprites (FNF)</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #111;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.description {
+    text-align: center;
+    color: #ccc;
+    line-height: 1.5;
+    margin: 0 auto 25px;
+    max-width: 850px;
+}
+
+.section {
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.section h2 {
+    margin: 0 0 6px;
+    font-size: 21px;
+}
+
+.guide {
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+.file-input {
+    width: 100%;
+    padding: 12px;
+    background: #292929;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 8px;
+}
+
+.rename-box {
+    margin-top: 15px;
+    padding: 15px;
+    background: #151515;
+    border-radius: 9px;
+    border: 1px solid #333;
+}
+
+.rename-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.name-input {
+    width: 100%;
+    padding: 11px;
+    background: #222;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+.rename-help {
+    color: #888;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.rename-button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px;
+    border: 0;
+    border-radius: 7px;
+    background: #3b3b3b;
+    color: white;
+    font-weight: bold;
+}
+
+.rename-button:hover {
+    background: #4a4a4a;
+}
+
+.stats {
+    margin-top: 15px;
+    color: #bbb;
+    font-size: 14px;
+}
+
+.frames {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.frame {
+    position: relative;
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.frame img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    background-image:
+        linear-gradient(45deg, #333 25%, transparent 25%),
+        linear-gradient(-45deg, #333 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #333 75%),
+        linear-gradient(-45deg, transparent 75%, #333 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+
+.frame-name {
+    font-size: 12px;
+    word-break: break-all;
+    margin-top: 7px;
+    color: #ddd;
+}
+
+.frame-resolution {
+    color: #888;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.remove-frame {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 25px;
+    height: 25px;
+    border: 0;
+    border-radius: 50%;
+    background: #b3261e;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 25px;
+    padding: 0;
+}
+
+.remove-frame:hover {
+    background: #d32f2f;
+}
+
+.delete-section {
+    margin-top: 15px;
+    padding: 9px 13px;
+    border: 0;
+    border-radius: 7px;
+    background: #652525;
+    color: white;
+}
+
+.add-section-container {
+    text-align: center;
+    margin: 25px 0;
+}
+
+.add-section-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    min-width: 190px;
+    min-height: 52px;
+
+    padding: 10px 18px;
+
+    border: 1px solid #555;
+    border-radius: 9px;
+
+    background: #3a3a3a;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.add-section-button:hover {
+    background: #4a4a4a;
+}
+
+.plus-icon {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #555;
+    border-radius: 6px;
+
+    font-size: 25px;
+    line-height: 1;
+    font-weight: bold;
+}
+
+.controls {
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 25px;
+}
+
+.controls label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.package-input {
+    width: 100%;
+    padding: 12px;
+    background: #222;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 7px;
+    font-size: 16px;
+}
+
+.generate-button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 15px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: #1976d2;
+    color: white;
+
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.generate-button:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+}
+
+.summary {
+    margin-top: 18px;
+    padding: 15px;
+    background: #151515;
+    border-radius: 8px;
+    color: #bbb;
+    line-height: 1.6;
+}
+
+.preview-container {
+    margin-top: 25px;
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.preview-container h2 {
+    margin-top: 0;
+}
+
+.preview-image {
+    display: block;
+    max-width: 100%;
+    max-height: 600px;
+    margin: 15px auto 0;
+    object-fit: contain;
+    background-image:
+        linear-gradient(45deg, #333 25%, transparent 25%),
+        linear-gradient(-45deg, #333 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #333 75%),
+        linear-gradient(-45deg, transparent 75%, #333 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+}
+
+.message {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 7px;
+    display: none;
+    line-height: 1.5;
+}
+
+.message.success {
+    display: block;
+    background: #173b21;
+    border: 1px solid #285d36;
+}
+
+.message.error {
+    display: block;
+    background: #401b1b;
+    border: 1px solid #6d2929;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 12px;
+    }
+
+    .frames {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Creador de Sprites (FNF)</h1>
+
+    <p class="description">
+        Esta herramienta permite crear spritesheets y archivos XML para
+        personajes de Friday Night Funkin'. Puedes subir tus frames,
+        organizarlos automáticamente, renombrarlos y generar un ZIP
+        listo para utilizar en tu juego. Fue pensado especialmente para
+        usuarios de móvil, ya que en un teléfono puede ser un poco más
+        complicado preparar sprites para el juego.
+    </p>
+
+    <div id="sections"></div>
+
+    <div class="add-section-container">
+        <button class="add-section-button" id="addSectionBtn">
+            <span class="plus-icon">+</span>
+            <span>Agregar otra sección</span>
+        </button>
+    </div>
+
+    <div class="controls">
+
+        <label for="packageName">
+            Nombre del paquete
+        </label>
+
+        <input
+            id="packageName"
+            class="package-input"
+            type="text"
+            placeholder="Ejemplo: Personaje"
+        >
+
+        <div class="summary" id="summary">
+            No hay frames cargados.
+        </div>
+
+        <button
+            class="generate-button"
+            id="generateBtn"
+            disabled
+        >
+            Generar ZIP
+        </button>
+
+        <div id="message" class="message"></div>
+
+    </div>
+
+    <div class="preview-container" id="previewContainer" style="display:none;">
+        <h2>Vista previa</h2>
+        <img id="previewImage" class="preview-image">
+    </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<script>
+
+let sections = [];
+let nextSectionId = 1;
+
+
+/* =========================================================
+   CREAR SECCIÓN
+========================================================= */
+
+function createSection(title, guide, example) {
+
+    const section = {
+
+        id: nextSectionId++,
+
+        title: title || "",
+
+        guide: guide || "",
+
+        example: example || "Personaje",
+
+        frames: [],
+
+        input: null,
+
+        nameInput: null
+
+    };
+
+    sections.push(section);
+
+    renderSection(section);
+
+    updateEverything();
+}
+
+
+/* =========================================================
+   RENDERIZAR SECCIÓN
+========================================================= */
+
+function renderSection(section) {
+
+    const container = document.getElementById("sections");
+
+    const box = document.createElement("div");
+
+    box.className = "section";
+
+    box.dataset.sectionId = section.id;
+
+
+    const title = document.createElement("h2");
+
+    title.textContent = section.title || "Sección adicional";
+
+    box.appendChild(title);
+
+
+    const guide = document.createElement("div");
+
+    guide.className = "guide";
+
+    guide.textContent =
+        section.guide || "Suba sus frames aquí";
+
+    box.appendChild(guide);
+
+
+    /* INPUT DE ARCHIVOS */
+
+    const fileInput = document.createElement("input");
+
+    fileInput.type = "file";
+
+    fileInput.multiple = true;
+
+    fileInput.accept = "image/png,image/jpeg,image/webp";
+
+    fileInput.className = "file-input";
+
+    section.input = fileInput;
+
+    box.appendChild(fileInput);
+
+
+    /* RENOMBRADO */
+
+    const renameBox = document.createElement("div");
+
+    renameBox.className = "rename-box";
+
+
+    const renameLabel = document.createElement("label");
+
+    renameLabel.className = "rename-label";
+
+    renameLabel.textContent =
+        "Nombre base de los frames";
+
+    renameBox.appendChild(renameLabel);
+
+
+    const nameInput = document.createElement("input");
+
+    nameInput.type = "text";
+
+    nameInput.className = "name-input";
+
+    nameInput.placeholder =
+        section.example;
+
+    section.nameInput = nameInput;
+
+    renameBox.appendChild(nameInput);
+
+
+    const renameHelp = document.createElement("div");
+
+    renameHelp.className = "rename-help";
+
+    renameHelp.textContent =
+        "Se añadirá automáticamente 0000, 0001, 0002...";
+
+    renameBox.appendChild(renameHelp);
+
+
+    const renameButton = document.createElement("button");
+
+    renameButton.className = "rename-button";
+
+    renameButton.textContent =
+        "Renombrar todos los frames";
+
+    renameButton.addEventListener(
+        "click",
+        function() {
+
+            renameAllFrames(section);
+
+        }
+    );
+
+    renameBox.appendChild(renameButton);
+
+    box.appendChild(renameBox);
+
+
+    /* ESTADÍSTICAS */
+
+    const stats = document.createElement("div");
+
+    stats.className = "stats";
+
+    stats.id = `stats-${section.id}`;
+
+    stats.textContent =
+        "0 frames";
+
+    box.appendChild(stats);
+
+
+    /* FRAMES */
+
+    const frames = document.createElement("div");
+
+    frames.className = "frames";
+
+    frames.id = `frames-${section.id}`;
+
+    box.appendChild(frames);
+
+
+    /* BOTÓN ELIMINAR */
+
+    if (sections.length > 5) {
+
+        const deleteSectionButton =
+            document.createElement("button");
+
+        deleteSectionButton.className =
+            "delete-section";
+
+        deleteSectionButton.textContent =
+            "Eliminar esta sección";
+
+        deleteSectionButton.addEventListener(
+            "click",
+            function() {
+
+                if (
+                    !confirm(
+                        "¿Quieres eliminar esta sección?"
+                    )
+                ) {
+                    return;
+                }
+
+                sections =
+                    sections.filter(
+                        function(item) {
+                            return item.id !== section.id;
+                        }
+                    );
+
+                if (section.frames) {
+
+                    section.frames.forEach(
+                        function(frame) {
+
+                            if (frame.objectURL) {
+
+                                URL.revokeObjectURL(
+                                    frame.objectURL
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+
+                box.remove();
+
+                updateEverything();
+
+            }
+        );
+
+        box.appendChild(deleteSectionButton);
+
+    }
+
+
+    container.appendChild(box);
+
+
+    /* ARCHIVOS SELECCIONADOS */
+
+    fileInput.addEventListener(
+        "change",
+        async function() {
+
+            section.frames.forEach(
+                function(frame) {
+
+                    if (frame.objectURL) {
+
+                        URL.revokeObjectURL(
+                            frame.objectURL
+                        );
+
+                    }
+
+                }
+            );
+
+
+            const selectedFiles =
+                Array.from(
+                    fileInput.files || []
+                );
+
+
+            section.frames =
+                selectedFiles.map(
+                    function(file) {
+
+                        return {
+
+                            file: file,
+
+                            outputName: file.name,
+
+                            width: 0,
+
+                            height: 0,
+
+                            image: null,
+
+                            objectURL:
+                                URL.createObjectURL(file),
+
+                            loaded: false,
+
+                            error: false
+
+                        };
+
+                    }
+                );
+
+
+            section.frames.sort(
+                function(a, b) {
+
+                    return a.file.name.localeCompare(
+                        b.file.name,
+                        undefined,
+                        {
+                            numeric: true,
+                            sensitivity: "base"
+                        }
+                    );
+
+                }
+            );
+
+
+            renderSectionFrames(section);
+
+
+            for (
+                let i = 0;
+                i < section.frames.length;
+                i++
+            ) {
+
+                await loadFrame(
+                    section.frames[i]
+                );
+
+                renderSectionFrames(section);
+
+                updateEverything();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CARGAR IMAGEN
+========================================================= */
+
+function loadFrame(frame) {
+
+    return new Promise(
+        function(resolve) {
+
+            const img = new Image();
+
+            img.onload = function() {
+
+                frame.width = img.naturalWidth;
+
+                frame.height = img.naturalHeight;
+
+                frame.image = img;
+
+                frame.loaded = true;
+
+                frame.error = false;
+
+                resolve();
+
+            };
+
+            img.onerror = function() {
+
+                frame.loaded = false;
+
+                frame.error = true;
+
+                resolve();
+
+            };
+
+            img.src = frame.objectURL;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RENOMBRAR TODOS LOS FRAMES
+========================================================= */
+
+function renameAllFrames(section) {
+
+    if (!section.frames.length) {
+
+        showMessage(
+            "Primero sube algunos frames a esta sección.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    let baseName =
+        section.nameInput.value.trim();
+
+
+    if (!baseName) {
+
+        showMessage(
+            "Escribe un nombre base para los frames.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* Quitar extensiones */
+
+    baseName =
+        baseName.replace(
+            /\.(png|jpg|jpeg|webp)$/i,
+            ""
+        );
+
+
+    /* Caracteres inválidos */
+
+    baseName =
+        baseName.replace(
+            /[\\/:*?"<>|]/g,
+            "_"
+        );
+
+
+    if (!baseName) {
+
+        showMessage(
+            "El nombre no es válido.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    section.frames.forEach(
+        function(frame, index) {
+
+            const number =
+                String(index).padStart(4, "0");
+
+            frame.outputName =
+                `${baseName}${number}.png`;
+
+        }
+    );
+
+
+    renderSectionFrames(section);
+
+    updateEverything();
+
+
+    showMessage(
+        `Los ${section.frames.length} frames de esta sección fueron renombrados correctamente.`,
+        "success"
+    );
+
+}
+
+
+/* =========================================================
+   OBTENER BASE DEL NOMBRE
+========================================================= */
+
+function getBaseFromOutputName(frame) {
+
+    if (!frame) {
+        return null;
+    }
+
+
+    const match =
+        frame.outputName.match(
+            /^(.*?)(\d{4})\.png$/i
+        );
+
+
+    if (!match) {
+        return null;
+    }
+
+
+    return match[1];
+
+}
+
+
+/* =========================================================
+   RENDERIZAR FRAMES
+========================================================= */
+
+function renderSectionFrames(section) {
+
+    const container =
+        document.getElementById(
+            `frames-${section.id}`
+        );
+
+
+    const stats =
+        document.getElementById(
+            `stats-${section.id}`
+        );
+
+
+    if (!container || !stats) {
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    stats.textContent =
+        `${section.frames.length} frame${
+            section.frames.length === 1
+                ? ""
+                : "s"
+        }`;
+
+
+    section.frames.forEach(
+        function(frame, index) {
+
+            const card =
+                document.createElement("div");
+
+            card.className = "frame";
+
+
+            /* ELIMINAR */
+
+            const removeButton =
+                document.createElement("button");
+
+            removeButton.className =
+                "remove-frame";
+
+            removeButton.textContent =
+                "×";
+
+            removeButton.title =
+                "Eliminar frame";
+
+
+            removeButton.addEventListener(
+                "click",
+                function() {
+
+                    if (frame.objectURL) {
+
+                        URL.revokeObjectURL(
+                            frame.objectURL
+                        );
+
+                    }
+
+
+                    section.frames.splice(
+                        index,
+                        1
+                    );
+
+
+                    /*
+                     * Si ya habían sido renombrados,
+                     * conservar el nombre base y
+                     * volver a numerar.
+                     */
+
+                    if (
+                        section.frames.length > 0
+                    ) {
+
+                        const base =
+                            getBaseFromOutputName(
+                                section.frames[0]
+                            );
+
+
+                        if (base !== null) {
+
+                            section.frames.forEach(
+                                function(item, i) {
+
+                                    item.outputName =
+                                        `${base}${String(i).padStart(4, "0")}.png`;
+
+                                }
+                            );
+
+                        }
+
+                    }
+
+
+                    renderSectionFrames(
+                        section
+                    );
+
+                    updateEverything();
+
+                }
+            );
+
+
+            card.appendChild(
+                removeButton
+            );
+
+
+            /* IMAGEN */
+
+            if (frame.image) {
+
+                const img =
+                    document.createElement("img");
+
+                img.src =
+                    frame.objectURL;
+
+                img.alt =
+                    frame.outputName;
+
+                card.appendChild(img);
+
+            }
+
+
+            /* NOMBRE */
+
+            const name =
+                document.createElement("div");
+
+            name.className =
+                "frame-name";
+
+            name.textContent =
+                frame.outputName;
+
+            card.appendChild(name);
+
+
+                        /* =========================================================
+               RESOLUCIÓN
+            ========================================================= */
+
+            const resolution =
+                document.createElement("div");
+
+            resolution.className =
+                "frame-resolution";
+
+
+            if (frame.loaded) {
+
+                resolution.textContent =
+                    `${frame.width} × ${frame.height}`;
+
+            } else if (frame.error) {
+
+                resolution.textContent =
+                    "Error al cargar";
+
+            } else {
+
+                resolution.textContent =
+                    "Cargando...";
+
+            }
+
+
+            card.appendChild(
+                resolution
+            );
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ACTUALIZAR TODO
+========================================================= */
+
+function updateEverything() {
+
+    let totalFrames = 0;
+
+    let loadedFrames = 0;
+
+    let errorFrames = 0;
+
+    let maxWidth = 0;
+
+    let maxHeight = 0;
+
+
+    sections.forEach(
+        function(section) {
+
+            totalFrames +=
+                section.frames.length;
+
+
+            section.frames.forEach(
+                function(frame) {
+
+                    if (frame.loaded) {
+
+                        loadedFrames++;
+
+                        maxWidth =
+                            Math.max(
+                                maxWidth,
+                                frame.width
+                            );
+
+                        maxHeight =
+                            Math.max(
+                                maxHeight,
+                                frame.height
+                            );
+
+                    }
+
+
+                    if (frame.error) {
+
+                        errorFrames++;
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    const summary =
+        document.getElementById(
+            "summary"
+        );
+
+
+    if (totalFrames === 0) {
+
+        summary.innerHTML =
+            "No hay frames cargados.";
+
+        document.getElementById(
+            "generateBtn"
+        ).disabled = true;
+
+        return;
+
+    }
+
+
+    const columns =
+        Math.ceil(
+            Math.sqrt(totalFrames)
+        );
+
+
+    const rows =
+        Math.ceil(
+            totalFrames / columns
+        );
+
+
+    const sheetWidth =
+        columns * maxWidth;
+
+
+    const sheetHeight =
+        rows * maxHeight;
+
+
+    const megapixels =
+        (
+            sheetWidth *
+            sheetHeight
+        ) / 1000000;
+
+
+    summary.innerHTML =
+
+        `Frames totales: <b>${totalFrames}</b><br>` +
+
+        `Frames cargados: <b>${loadedFrames}</b><br>` +
+
+        `Distribución automática: <b>${columns} × ${rows}</b><br>` +
+
+        `Resolución máxima de frame: <b>${maxWidth} × ${maxHeight}</b><br>` +
+
+        `Resolución del spritesheet: <b>${sheetWidth} × ${sheetHeight}</b><br>` +
+
+        `Tamaño aproximado del canvas: <b>${megapixels.toFixed(2)} MP</b>` +
+
+        (
+            errorFrames > 0
+                ? `<br><span style="color:#ff7777">Hay ${errorFrames} frame(s) con error.</span>`
+                : ""
+        );
+
+
+    const generateBtn =
+        document.getElementById(
+            "generateBtn"
+        );
+
+
+    generateBtn.disabled =
+        totalFrames === 0 ||
+        loadedFrames !== totalFrames ||
+        errorFrames > 0;
+
+}
+
+
+/* =========================================================
+   GENERAR SPRITESHEET
+========================================================= */
+
+async function generateSpritesheet() {
+
+    const allFrames = [];
+
+
+    sections.forEach(
+        function(section) {
+
+            section.frames.forEach(
+                function(frame) {
+
+                    allFrames.push(frame);
+
+                }
+            );
+
+        }
+    );
+
+
+    if (!allFrames.length) {
+
+        showMessage(
+            "No hay frames para generar.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const packageInput =
+        document.getElementById(
+            "packageName"
+        );
+
+
+    let packageName =
+        packageInput.value.trim();
+
+
+    if (!packageName) {
+
+        showMessage(
+            "Escribe un nombre para el paquete.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    packageName =
+        packageName.replace(
+            /\.(zip|png|xml)$/i,
+            ""
+        );
+
+
+    packageName =
+        packageName.replace(
+            /[\\/:*?"<>|]/g,
+            "_"
+        );
+
+
+    if (!packageName) {
+
+        showMessage(
+            "El nombre del paquete no es válido.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const totalFrames =
+        allFrames.length;
+
+
+    const columns =
+        Math.ceil(
+            Math.sqrt(totalFrames)
+        );
+
+
+    const rows =
+        Math.ceil(
+            totalFrames / columns
+        );
+
+
+    let maxWidth = 0;
+
+    let maxHeight = 0;
+
+
+    allFrames.forEach(
+        function(frame) {
+
+            maxWidth =
+                Math.max(
+                    maxWidth,
+                    frame.width
+                );
+
+            maxHeight =
+                Math.max(
+                    maxHeight,
+                    frame.height
+                );
+
+        }
+    );
+
+
+    const sheetWidth =
+        columns * maxWidth;
+
+
+    const sheetHeight =
+        rows * maxHeight;
+
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.width =
+        sheetWidth;
+
+    canvas.height =
+        sheetHeight;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    ctx.clearRect(
+        0,
+        0,
+        sheetWidth,
+        sheetHeight
+    );
+
+
+    let xml =
+`<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="${escapeXML(packageName)}.png">
+`;
+
+
+    allFrames.forEach(
+        function(frame, index) {
+
+            const column =
+                index % columns;
+
+
+            const row =
+                Math.floor(
+                    index / columns
+                );
+
+
+            const x =
+                column * maxWidth;
+
+
+            const y =
+                row * maxHeight;
+
+
+            ctx.drawImage(
+                frame.image,
+                x,
+                y
+            );
+
+
+            xml +=
+`    <SubTexture name="${escapeXML(frame.outputName)}" x="${x}" y="${y}" width="${frame.width}" height="${frame.height}"/>
+`;
+
+        }
+    );
+
+
+    xml +=
+`</TextureAtlas>`;
+
+
+    const pngBlob =
+        await canvasToBlob(
+            canvas
+        );
+
+
+    if (!pngBlob) {
+
+        showMessage(
+            "No se pudo generar el PNG.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const xmlFileName =
+        packageName.charAt(0).toLowerCase() +
+        packageName.slice(1) +
+        ".xml";
+
+
+    const zip =
+        new JSZip();
+
+
+    zip.file(
+        `${packageName}.png`,
+        pngBlob
+    );
+
+
+    zip.file(
+        xmlFileName,
+        xml
+    );
+
+
+    const zipBlob =
+        await zip.generateAsync(
+            {
+                type: "blob",
+                compression: "STORE"
+            }
+        );
+
+
+    const previewURL =
+        URL.createObjectURL(
+            pngBlob
+        );
+
+
+    const previewContainer =
+        document.getElementById(
+            "previewContainer"
+        );
+
+
+    const previewImage =
+        document.getElementById(
+            "previewImage"
+        );
+
+
+    if (
+        previewImage.dataset.objectURL
+    ) {
+
+        URL.revokeObjectURL(
+            previewImage.dataset.objectURL
+        );
+
+    }
+
+
+    previewImage.src =
+        previewURL;
+
+
+    previewImage.dataset.objectURL =
+        previewURL;
+
+
+    previewContainer.style.display =
+        "block";
+
+
+    downloadBlob(
+        zipBlob,
+        `${packageName}.zip`
+    );
+
+
+    showMessage(
+        `ZIP generado correctamente.<br><br>
+        Contiene:<br>
+        • ${packageName}.png<br>
+        • ${xmlFileName}<br><br>
+        Después de generar el ZIP, revisa la carpeta de Descargas de tu dispositivo.`,
+        "success"
+    );
+
+}
+
+
+/* =========================================================
+   CANVAS A BLOB
+========================================================= */
+
+function canvasToBlob(canvas) {
+
+    return new Promise(
+        function(resolve) {
+
+            canvas.toBlob(
+                function(blob) {
+
+                    resolve(blob);
+
+                },
+                "image/png"
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DESCARGAR ARCHIVO
+========================================================= */
+
+function downloadBlob(blob, filename) {
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const a =
+        document.createElement(
+            "a"
+        );
+
+
+    a.href = url;
+
+    a.download = filename;
+
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+
+    setTimeout(
+        function() {
+
+            URL.revokeObjectURL(url);
+
+        },
+        1000
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPAR XML
+========================================================= */
+
+function escapeXML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+
+}
+
+
+/* =========================================================
+   MENSAJES
+========================================================= */
+
+function showMessage(text, type) {
+
+    const message =
+        document.getElementById(
+            "message"
+        );
+
+
+    message.className =
+        `message ${type}`;
+
+
+    message.innerHTML =
+        text;
+
+
+    message.style.display =
+        "block";
+
+}
+
+
+/* =========================================================
+   BOTÓN GENERAR
+========================================================= */
+
+document
+    .getElementById("generateBtn")
+    .addEventListener(
+        "click",
+        generateSpritesheet
+    );
+
+
+/* =========================================================
+   AGREGAR SECCIÓN
+========================================================= */
+
+document
+    .getElementById("addSectionBtn")
+    .addEventListener(
+        "click",
+        function() {
+
+            createSection(
+                "",
+                "Suba sus frames aquí",
+                "Personaje"
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   SECCIONES INICIALES
+========================================================= */
+
+createSection(
+    "Idle pose",
+    "Suba su pose idle aquí",
+    "Personajeidle"
+);
+
+
+createSection(
+    "Left pose (Pose izquierda)",
+    "Suba sus poses de izquierda aquí",
+    "Personajeleft"
+);
+
+
+createSection(
+    "Down pose (Pose abajo)",
+    "Suba sus poses de abajo aquí",
+    "Personajedown"
+);
+
+
+createSection(
+    "Up pose (Pose arriba)",
+    "Suba sus poses de arriba aquí",
+    "Personajeup"
+);
+
+
+createSection(
+    "Right pose (Pose derecha)",
+    "Suba sus poses de derecha aquí",
+    "Personajeright"
+);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="theme-color" content="#111111">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ELETool</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #111;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* =========================
+   IDIOMA
+========================= */
+
+.language-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.language-button {
+    width: 52px;
+    height: 40px;
+
+    border: 1px solid #555;
+    border-radius: 8px;
+
+    background: #333;
+    color: white;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.language-button:hover {
+    background: #444;
+}
+
+.help-button {
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid #555;
+    border-radius: 8px;
+
+    background: #333;
+    color: white;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.help-button:hover {
+    background: #444;
+}
+
+.help-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.help-topbar {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 18px;
+}
+
+.help-back-button {
+    padding: 10px 16px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    background: #333;
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.help-back-button:hover {
+    background: #444;
+}
+
+.animation-viewer-panel { background:#1b1b1b; border:1px solid #333; border-radius:12px; padding:20px; margin:20px 0; }
+.animation-viewer-panel h2 { margin:0 0 8px; }
+.animation-viewer-controls { display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin-top:16px; position:relative; }
+.animation-select-button { flex:1; min-width:220px; padding:12px 15px; border:1px solid #555; border-radius:8px; background:#333; color:#fff; font-weight:bold; cursor:pointer; text-align:left; }
+.animation-select-button:hover { background:#444; }
+.animation-select-menu { width:100%; display:grid; gap:6px; background:#151515; border:1px solid #333; border-radius:8px; padding:8px; }
+.animation-option-button { padding:11px 12px; border:1px solid #444; border-radius:7px; background:#222; color:#fff; text-align:left; cursor:pointer; }
+.animation-option-button:hover { background:#333; }
+.animation-fps-field { display:flex; flex-direction:column; gap:6px; min-width:120px; color:#ccc; font-size:14px; }
+.animation-fps-field input { width:120px; padding:11px; border:1px solid #555; border-radius:7px; background:#111; color:#fff; }
+.animation-preview { min-height:260px; margin-top:18px; background:#111; border:1px solid #333; border-radius:10px; display:flex; align-items:center; justify-content:center; overflow:hidden; padding:12px; }
+.animation-preview img { display:block; max-width:100%; max-height:520px; width:auto; height:auto; object-fit:contain; image-rendering:auto; }
+.animation-empty { color:#aaa; text-align:center; padding:30px 15px; }
+.animation-status { margin-top:10px; color:#aaa; text-align:center; font-size:14px; }
+
+.icon-creator-page { max-width: 900px; margin: 0 auto; }
+.icon-creator-topbar { display:flex; justify-content:flex-start; margin-bottom:18px; }
+.icon-creator-panel { background:#1b1b1b; border:1px solid #333; border-radius:12px; padding:20px; margin-top:18px; }
+.icon-file-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.icon-file-box { background:#151515; border:1px solid #333; border-radius:10px; padding:14px; }
+.icon-file-box h3 { margin:0 0 10px; }
+.icon-preview { display:block; width:150px; height:150px; max-width:100%; object-fit:contain; background:#181818; border:1px solid #444; margin:12px auto 0; }
+.icon-creator-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+.icon-generate-button,.icon-download-button { flex:1; min-width:220px; padding:13px 16px; border:1px solid #555; border-radius:8px; background:#333; color:white; font-size:15px; font-weight:bold; cursor:pointer; }
+.icon-generate-button:disabled,.icon-download-button:disabled { opacity:.45; cursor:not-allowed; }
+.icon-generate-button:hover:not(:disabled),.icon-download-button:hover:not(:disabled) { background:#444; }
+.icon-result { margin-top:22px; text-align:center; }
+.icon-result canvas { display:block; width:300px; height:150px; max-width:100%; border:1px solid #555; margin:12px auto; }
+.generic-creator-page { max-width: 900px; margin: 0 auto; }
+.generic-creator-panel { background:#1b1b1b; border:1px solid #333; border-radius:12px; padding:20px; margin-top:18px; }
+.generic-creator-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+.generic-creator-actions button { flex:1; min-width:220px; padding:13px 16px; border:1px solid #555; border-radius:8px; background:#333; color:#fff; font-size:15px; font-weight:bold; cursor:pointer; }
+.generic-creator-actions button:hover { background:#444; }
+.generic-frame-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px; margin-top:16px; }
+.generic-frame-item { position:relative; background:#151515; border:1px solid #333; border-radius:8px; padding:8px; text-align:center; }
+.generic-frame-item img { width:100%; height:120px; object-fit:contain; display:block; }
+.generic-frame-item button { margin-top:7px; padding:6px 9px; border:1px solid #555; border-radius:6px; background:#333; color:#fff; cursor:pointer; }
+.generic-result { margin-top:22px; text-align:center; }
+.generic-result img { display:block; max-width:100%; height:auto; margin:12px auto; border:1px solid #555; image-rendering:auto; }
+
+.icon-tool-page { max-width: 900px; margin: 0 auto; }
+.icon-tool-topbar { display:flex; justify-content:flex-start; margin-bottom:18px; }
+.icon-tool-panel { background:#1b1b1b; border:1px solid #333; border-radius:12px; padding:20px; margin-top:18px; }
+.icon-tool-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.icon-tool-card { background:#151515; border:1px solid #333; border-radius:10px; padding:14px; }
+.icon-tool-card h3 { margin:0 0 10px; }
+.icon-tool-card input { width:100%; }
+.icon-tool-preview { display:block; width:150px; height:150px; max-width:100%; object-fit:contain; background:#181818; border:1px solid #444; margin:12px auto 0; }
+.icon-tool-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+.icon-tool-actions button { flex:1; min-width:220px; padding:13px 16px; border:1px solid #555; border-radius:8px; background:#333; color:#fff; font-size:15px; font-weight:bold; cursor:pointer; }
+.icon-tool-actions button:disabled { opacity:.45; cursor:not-allowed; }
+.icon-tool-actions button:hover:not(:disabled) { background:#444; }
+.icon-tool-result { margin-top:22px; text-align:center; }
+.icon-tool-result canvas { display:block; width:300px; height:150px; max-width:100%; border:1px solid #555; margin:12px auto; }
+
+
+.help-section {
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 15px;
+}
+
+.help-section h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.help-section p,
+.help-section li {
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.help-section ul {
+    padding-left: 22px;
+}
+
+/* =========================
+   TÍTULO
+========================= */
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.app-subtitle {
+    margin-top: -8px;
+    margin-bottom: 14px;
+    color: #aaa;
+    font-size: 16px;
+    text-align: center;
+}
+
+.web-version-button {
+    display: block;
+    width: 100%;
+    margin: 12px 0 20px;
+    padding: 12px 16px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    background: #202020;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.web-version-button:active {
+    opacity: 0.8;
+}
+
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.65);
+    z-index: 99999;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.confirm-dialog {
+    width: min(420px, 100%);
+    background: #202020;
+    border: 1px solid #555;
+    border-radius: 12px;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.confirm-dialog p {
+    margin: 0 0 18px;
+    color: #fff;
+    line-height: 1.5;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.confirm-actions button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid #555;
+}
+
+.description {
+    text-align: center;
+    color: #ccc;
+    line-height: 1.5;
+    margin: 0 auto 25px;
+    max-width: 850px;
+}
+
+.resolution-warning {
+    margin: 14px 0 18px;
+    padding: 12px 14px;
+    background: #1b1b1b;
+    border: 1px solid #555;
+    border-radius: 8px;
+    color: #f0f0f0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+
+
+
+/* =========================
+   SECCIONES
+========================= */
+
+.section {
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.section h2 {
+    margin: 0 0 6px;
+    font-size: 21px;
+}
+
+.guide {
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+.file-input {
+    width: 100%;
+    padding: 12px;
+    background: #292929;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 8px;
+}
+
+/* =========================
+   RENOMBRAR
+========================= */
+
+.rename-box {
+    margin-top: 15px;
+    padding: 15px;
+    background: #151515;
+    border-radius: 9px;
+    border: 1px solid #333;
+}
+
+.rename-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.name-input {
+    width: 100%;
+    padding: 11px;
+    background: #222;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+.rename-help {
+    color: #888;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+.rename-button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px;
+    border: 0;
+    border-radius: 7px;
+    background: #3b3b3b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.rename-button:hover {
+    background: #4a4a4a;
+}
+
+/* =========================
+   ESTADÍSTICAS
+========================= */
+
+.stats {
+    margin-top: 15px;
+    color: #bbb;
+    font-size: 14px;
+}
+
+/* =========================
+   FRAMES
+========================= */
+
+.frames {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.frame {
+    position: relative;
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.frame img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+
+    background-image:
+        linear-gradient(45deg, #333 25%, transparent 25%),
+        linear-gradient(-45deg, #333 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #333 75%),
+        linear-gradient(-45deg, transparent 75%, #333 75%);
+
+    background-size: 16px 16px;
+
+    background-position:
+        0 0,
+        0 8px,
+        8px -8px,
+        -8px 0;
+}
+
+.frame-name {
+    font-size: 12px;
+    word-break: break-all;
+    margin-top: 7px;
+    color: #ddd;
+}
+
+.frame-resolution {
+    position: absolute;
+    left: 7px;
+    top: 7px;
+    margin: 0;
+    padding: 3px 5px;
+    background: rgba(0, 0, 0, 0.78);
+    border: 1px solid #555;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 10px;
+    line-height: 1.2;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.clear-frames-button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px solid #555;
+    border-radius: 7px;
+    background: #2a2a2a;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.clear-frames-button:hover {
+    background: #3a3a3a;
+}
+
+.remove-frame {
+    position: absolute;
+
+    top: 5px;
+    right: 5px;
+
+    width: 25px;
+    height: 25px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #b3261e;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    line-height: 25px;
+    padding: 0;
+
+    cursor: pointer;
+}
+
+.remove-frame:hover {
+    background: #d32f2f;
+}
+
+/* =========================
+   ELIMINAR SECCIÓN
+========================= */
+
+.delete-section {
+    margin-top: 15px;
+    padding: 9px 13px;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: #652525;
+    color: white;
+
+    cursor: pointer;
+}
+
+/* =========================
+   AGREGAR SECCIÓN
+========================= */
+
+.add-section-container {
+    text-align: center;
+    margin: 25px 0;
+}
+
+.add-section-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    min-width: 190px;
+    min-height: 52px;
+
+    padding: 10px 18px;
+
+    border: 1px solid #555;
+    border-radius: 9px;
+
+    background: #3a3a3a;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.add-section-button:hover {
+    background: #4a4a4a;
+}
+
+.plus-icon {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #555;
+
+    border-radius: 6px;
+
+    font-size: 25px;
+    line-height: 1;
+
+    font-weight: bold;
+}
+
+/* =========================
+   CONTROLES
+========================= */
+
+.controls {
+    background: #1b1b1b;
+
+    border: 1px solid #333;
+    border-radius: 12px;
+
+    padding: 18px;
+    margin-top: 25px;
+}
+
+.controls label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-weight: bold;
+}
+
+.package-input {
+    width: 100%;
+
+    padding: 12px;
+
+    background: #222;
+    color: white;
+
+    border: 1px solid #555;
+    border-radius: 7px;
+
+    font-size: 16px;
+}
+
+.generate-button {
+    width: 100%;
+
+    padding: 14px;
+
+    margin-top: 15px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: #1976d2;
+    color: white;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.generate-button:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* =========================
+   RESUMEN
+========================= */
+
+.summary {
+    margin-top: 18px;
+
+    padding: 15px;
+
+    background: #151515;
+
+    border-radius: 8px;
+
+    color: #bbb;
+
+    line-height: 1.6;
+}
+
+/* =========================
+   MENSAJES
+========================= */
+
+.message {
+    margin-top: 15px;
+
+    padding: 12px;
+
+    border-radius: 7px;
+
+    display: none;
+
+    line-height: 1.5;
+}
+
+.message.success {
+    display: block;
+
+    background: #173b21;
+
+    border: 1px solid #285d36;
+}
+
+.message.error {
+    display: block;
+
+    background: #401b1b;
+
+    border: 1px solid #6d2929;
+}
+
+/* =========================
+   PREVIEW
+========================= */
+
+.preview-container {
+    margin-top: 25px;
+
+    background: #1b1b1b;
+
+    border: 1px solid #333;
+    border-radius: 12px;
+
+    padding: 18px;
+}
+
+.preview-container h2 {
+    margin-top: 0;
+}
+
+.preview-image {
+    display: block;
+
+    max-width: 100%;
+    max-height: 600px;
+
+    margin: 15px auto 0;
+
+    object-fit: contain;
+
+    background-image:
+        linear-gradient(45deg, #333 25%, transparent 25%),
+        linear-gradient(-45deg, #333 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #333 75%),
+        linear-gradient(-45deg, transparent 75%, #333 75%);
+
+    background-size: 20px 20px;
+
+    background-position:
+        0 0,
+        0 10px,
+        10px -10px,
+        -10px 0;
+}
+
+/* =========================
+   MÓVIL
+========================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .frames {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+}
+
+
+        #installAppButton[hidden] { display: none !important; }
+        #installAppButton { cursor: pointer; }
+        .install-hint {
+            margin: 8px auto 14px;
+            max-width: 720px;
+            text-align: center;
+            font-size: 13px;
+            opacity: 0.78;
+            line-height: 1.45;
+        }
+</style>
+
+</head>
+
+<body>
+
+<div class="container" id="mainCreatorPage">
+
+    <div class="language-container">
+
+        <button
+            class="language-button"
+            id="languageButton"
+        >
+            ES
+        </button>
+
+        <button
+            class="help-button"
+            id="helpButton"
+            aria-label="Ayuda"
+        >
+            ?
+        </button>
+
+    </div>
+
+
+    <h1 id="mainTitle">
+        ELETool
+    </h1>
+
+    <div class="app-subtitle" id="appSubtitle">
+        Creador de Sprites (FNF)
+    </div>
+
+
+    <p
+        class="description"
+        id="description"
+    >
+        Esta herramienta permite crear spritesheets y archivos XML para
+        personajes de Friday Night Funkin'. Puedes subir tus frames,
+        organizarlos automáticamente, renombrarlos y generar un ZIP
+        listo para utilizar en tu juego. Fue pensado especialmente para
+        usuarios de móvil, ya que en un teléfono puede ser un poco más
+        complicado preparar sprites para el juego.
+    </p>
+
+    <button class="web-version-button" id="installAppButton" type="button" aria-label="Instalar ELETool">📱 Instalar ELETool</button>
+
+    <div class="install-hint" id="installHint">Instala ELETool en la pantalla de inicio para abrirlo como una aplicación.</div>
+
+    <div class="resolution-warning" id="resolutionWarning">
+        ⚠️ Para evitar errores, todos los frames de las secciones de animación deberían tener la misma resolución, tanto de ancho como de alto. Por ejemplo, si tus frames de Idle son 1024×1024 px, es recomendable que los frames de Left, Down, Up, Right y de las demás secciones de animación también sean 1024×1024 px. Si el ZIP no se quiere generar, tal vez se deba a que no todos los frames tienen la misma resolución.
+    </div>
+
+
+    <div id="sections"></div>
+
+
+    <div class="animation-viewer-panel" id="animationViewerPanel">
+        <h2 id="animationViewerTitle">Visor de animaciones</h2>
+        <p class="description" id="animationViewerIntro">Reproduce en bucle las animaciones de tus secciones con los FPS que elijas.</p>
+
+        <div class="animation-viewer-controls">
+            <button type="button" class="animation-select-button" id="animationSelectButton">Elegir animación</button>
+            <div class="animation-select-menu" id="animationSelectMenu" style="display:none;"></div>
+
+            <label class="animation-fps-field" for="animationFpsInput">
+                <span id="animationFpsLabel">FPS</span>
+                <input id="animationFpsInput" type="number" min="1" max="60" step="1" value="12">
+            </label>
+        </div>
+
+        <div class="animation-preview" id="animationPreview">
+            <div class="animation-empty" id="animationEmptyText">Selecciona una animación con frames para reproducirla.</div>
+            <img id="animationPreviewImage" alt="" style="display:none;">
+        </div>
+        <div class="animation-status" id="animationStatus"></div>
+    </div>
+
+
+    <div class="add-section-container">
+
+        <button
+            class="add-section-button"
+            id="addNormalSectionBtn"
+        >
+            <span class="plus-icon">+</span>
+            <span id="addNormalSectionText">
+                Agregar sección con XML y renombrado
+            </span>
+        </button>
+
+        <button
+            class="add-section-button"
+            id="spritesheetCreatorButton"
+        >
+            <span id="spritesheetCreatorButtonText">
+                Creador de Spritesheet sin XML
+            </span>
+        </button>
+
+        <button class="add-section-button" id="iconCreatorButton">
+            <span id="iconCreatorButtonText">Creador de iconos</span>
+        </button>
+
+    </div>
+
+
+    <div class="controls">
+
+        <label
+            for="packageName"
+            id="packageLabel"
+        >
+            Nombre del paquete
+        </label>
+
+
+        <input
+            id="packageName"
+            class="package-input"
+            type="text"
+            placeholder="Personaje"
+        >
+
+
+        <div
+            class="summary"
+            id="summary"
+        >
+            No hay frames cargados.
+        </div>
+
+
+        <button
+            class="generate-button"
+            id="generateBtn"
+            disabled
+        >
+            Generar ZIP
+        </button>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+    </div>
+
+
+    <div
+        class="preview-container"
+        id="previewContainer"
+        style="display:none;"
+    >
+
+        <h2 id="previewTitle">
+            Vista previa
+        </h2>
+
+        <img
+            id="previewImage"
+            class="preview-image"
+        >
+
+    </div>
+
+</div>
+
+
+<div class="container help-page" id="helpPage" style="display:none;">
+
+    <div class="help-topbar">
+        <button class="help-back-button" id="helpBackButton">Volver al creador</button>
+    </div>
+
+    <h1 id="helpTitle">Ayuda</h1>
+    <p class="description" id="helpIntro">Aquí encontrarás información sobre las funciones del creador de spritesheets.</p>
+
+    <section class="help-section">
+        <h2 id="helpGeneralTitle">¿Qué hace este programa?</h2>
+        <p id="helpGeneralText">Permite organizar imágenes, crear spritesheets automáticamente, renombrar frames y generar los archivos necesarios para usarlos en mods de Friday Night Funkin'.</p>
+    </section>
+
+    <section class="help-section">
+        <h2 id="helpNormalTitle">Secciones con XML y renombrado</h2>
+        <p id="helpNormalText">Las secciones Idle, Left, Down, Up y Right están pensadas para las poses de un personaje. Puedes subir varios frames, establecer un nombre base y renombrarlos automáticamente con números de cuatro dígitos.</p>
+    </section>
+
+    <section class="help-section">
+        <h2 id="helpGenericTitle">Secciones de Spritesheet</h2>
+        <p id="helpGenericText">Puedes agregar secciones adicionales para imágenes que solo necesiten convertirse en un spritesheet. Estas secciones no generan XML ni cambian los nombres originales de tus imágenes.</p>
+    </section>
+
+    <section class="help-section">
+        <h2 id="helpGridTitle">Distribución automática</h2>
+        <p id="helpGridText">El programa calcula automáticamente la distribución de filas y columnas según la cantidad de frames. No necesitas elegir manualmente el número de columnas.</p>
+    </section>
+
+    <section class="help-section">
+        <h2 id="helpNamingTitle">Nombres de frames y paquete</h2>
+        <p id="helpNamingText">El nombre del paquete se utiliza para los archivos principales generados. Los nombres de los frames normales se pueden generar automáticamente y se guardan en minúsculas.</p>
+    </section>
+
+    <section class="help-section">
+        <h2 id="helpMissTitle">¿Tus poses muestran las poses “miss” por instantes?</h2>
+        <p id="helpMissText">Si en el juego tus spritesheets cargan mal y algunas poses muestran sus poses “miss” por instantes, renombra todas las poses con una letra diferente a sus poses miss. Por ejemplo, si tienes <strong>Personajeleft</strong> y <strong>Personajemissleft</strong>, cambia <strong>Personajeleft</strong> a <strong>Personajeleftt</strong>, añadiendo una letra extra al final para evitar problemas.</p>
+    </section>
+
+    <section class="help-section">
+        <h2 id="helpTipsTitle">Consejos</h2>
+        <ul>
+            <li id="helpTip1">Usa imágenes con transparencia cuando tu personaje o elemento necesite un fondo transparente.</li>
+            <li id="helpTip2">Revisa la vista previa y las estadísticas antes de generar el ZIP.</li>
+            <li id="helpTip3">Si agregas una sección que ya no necesitas, puedes eliminarla desde esa misma sección.</li>
+        </ul>
+    </section>
+
+    <section class="help-section">
+        <h2 id="helpContactTitle">¿Necesitas más ayuda?</h2>
+        <p id="helpContactText">Si necesitas más ayuda o tienes sugerencias, contacta al creador del programa por discord<br><br>Usuario: <strong>"ele.exe"</strong></p>
+    </section>
+
+</div>
+
+<div class="container icon-tool-page" id="iconToolPage" style="display:none;">
+    <div class="icon-tool-topbar">
+        <button class="help-back-button" id="iconToolBackButton" type="button">Volver al creador</button>
+    </div>
+
+    <h1 id="iconToolTitle">Creador de iconos</h1>
+    <p class="description" id="iconToolIntro">Selecciona los dos iconos de la barra de vida. Cada icono se redimensionará a 150×150 px y el spritesheet final será de 300×150 px.</p>
+
+    <div class="icon-tool-panel">
+        <div class="icon-tool-grid">
+            <div class="icon-tool-card">
+                <h3 id="iconToolNeutralTitle">Icono neutral</h3>
+                <input type="file" id="iconToolNeutralInput" accept="image/png,image/jpeg,image/webp,image/gif">
+                <img id="iconToolNeutralPreview" class="icon-tool-preview" alt="">
+            </div>
+
+            <div class="icon-tool-card">
+                <h3 id="iconToolLosingTitle">Icono perdiendo</h3>
+                <input type="file" id="iconToolLosingInput" accept="image/png,image/jpeg,image/webp,image/gif">
+                <img id="iconToolLosingPreview" class="icon-tool-preview" alt="">
+            </div>
+        </div>
+
+        <div class="icon-tool-actions">
+            <button type="button" id="iconToolGenerateButton" disabled>Generar spritesheet 300×150</button>
+            <button type="button" id="iconToolDownloadButton" disabled>Descargar spritesheet 300×150</button>
+        </div>
+
+        <div class="icon-tool-result" id="iconToolResult" style="display:none;">
+            <h2 id="iconToolResultTitle">Spritesheet generado</h2>
+            <p id="iconToolResultInfo">Cada icono: 150×150 px | Spritesheet final: 300×150 px</p>
+            <canvas id="iconToolCanvas" width="300" height="150"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="container generic-creator-page" id="genericCreatorPage" style="display:none;">
+    <div class="icon-creator-topbar">
+        <button class="help-back-button" id="genericCreatorBackButton">Volver al creador</button>
+    </div>
+    <h1 id="genericCreatorTitle">Creador de Spritesheet sin XML</h1>
+    <p class="description" id="genericCreatorIntro">Crea un spritesheet independiente sin XML ni renombrado. Los nombres originales de tus imágenes se conservan.</p>
+    <div class="generic-creator-panel">
+        <input type="file" id="genericCreatorInput" accept="image/png,image/jpeg,image/webp" multiple>
+        <div id="genericCreatorStats" class="stats"></div>
+        <div id="genericCreatorFrames" class="generic-frame-list"></div>
+        <div class="generic-creator-actions">
+            <button type="button" id="genericCreatorGenerateButton">Generar spritesheet</button>
+            <button type="button" id="genericCreatorDownloadButton" disabled>Descargar PNG</button>
+        </div>
+        <div class="generic-result" id="genericCreatorResult" style="display:none;">
+            <h2 id="genericCreatorResultTitle">Spritesheet generado</h2>
+            <p id="genericCreatorResultInfo"></p>
+            <img id="genericCreatorResultImage" alt="">
+        </div>
+    </div>
+</div>
+
+
+<div class="confirm-overlay" id="appConfirmOverlay">
+    <div class="confirm-dialog" role="dialog" aria-modal="true">
+        <p id="appConfirmText"></p>
+        <div class="confirm-actions">
+            <button type="button" id="appConfirmCancel">Cancelar</button>
+            <button type="button" id="appConfirmOk">Aceptar</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+
+<script>
+
+/* =========================================================
+   IDIOMA
+========================================================= */
+
+let currentLanguage =
+    localStorage.getItem("spriteCreatorLanguage") || "es";
+
+
+const translations = {
+
+    es: {
+
+        title:
+            "ELETool",
+        subtitle:
+            "Creador de Sprites (FNF)",
+
+        idleTitle: "Idle pose",
+        leftTitle: "Left pose (Pose izquierda)",
+        downTitle: "Down pose (Pose abajo)",
+        upTitle: "Up pose (Pose arriba)",
+        rightTitle: "Right pose (Pose derecha)",
+
+        animationViewerTitle: "Visor de animaciones",
+        animationViewerIntro: "Reproduce en bucle las animaciones de tus secciones con los FPS que elijas.",
+        animationIdle: "Idle",
+        animationLeft: "Left pose",
+        animationDown: "Down pose",
+        animationUp: "Up pose",
+        animationRight: "Right pose",
+        animationSelect: "Elegir animación",
+        animationFps: "FPS",
+        animationEmpty: "Selecciona una animación con frames para reproducirla.",
+        animationNoFrames: "Esta animación no tiene frames cargados.",
+        animationFrames: "frames",
+        customAnimationName: "Nombre de la animación",
+        customAnimationPlaceholder: "Ej. hey",
+        animationNeedName: "Ponle un nombre a esta sección para mostrarla en el visor.",
+
+        helpTitle: "Ayuda",
+        helpBack: "Volver al creador",
+        helpIntro: "Aquí encontrarás información sobre las funciones del creador de spritesheets.",
+        helpGeneralTitle: "¿Qué hace este programa?",
+        helpGeneralText: "Permite organizar imágenes, crear spritesheets automáticamente, renombrar frames y generar los archivos necesarios para usarlos en mods de Friday Night Funkin'.",
+        helpNormalTitle: "Secciones con XML y renombrado",
+        helpNormalText: "Las secciones Idle, Left, Down, Up y Right están pensadas para las poses de un personaje. Puedes subir varios frames, establecer un nombre base y renombrarlos automáticamente con números de cuatro dígitos.",
+        helpGenericTitle: "Secciones de Spritesheet",
+        helpGenericText: "Puedes agregar secciones adicionales para imágenes que solo necesiten convertirse en un spritesheet. Estas secciones no generan XML ni cambian los nombres originales de tus imágenes.",
+        helpGridTitle: "Distribución automática",
+        helpGridText: "El programa calcula automáticamente la distribución de filas y columnas según la cantidad de frames. No necesitas elegir manualmente el número de columnas.",
+        helpNamingTitle: "Nombres de frames y paquete",
+        helpNamingText: "El nombre del paquete se utiliza para los archivos principales generados. Los nombres de los frames normales se pueden generar automáticamente y se guardan en minúsculas.",
+        helpMissTitle: "¿Tus poses muestran las poses “miss” por instantes?",
+        helpMissText: "Si en el juego tus spritesheets cargan mal y algunas poses muestran sus poses “miss” por instantes, renombra todas las poses con una letra diferente a sus poses miss. Por ejemplo, si tienes Personajeleft y Personajemissleft, cambia Personajeleft a Personajeleftt, añadiendo una letra extra al final para evitar problemas.",
+        helpTipsTitle: "Consejos",
+        helpTip1: "Usa imágenes con transparencia cuando tu personaje o elemento necesite un fondo transparente.",
+        helpTip2: "Revisa la vista previa y las estadísticas antes de generar el ZIP.",
+        helpTip3: "Si agregas una sección que ya no necesitas, puedes eliminarla desde esa misma sección.",
+        helpContactTitle: "¿Necesitas más ayuda?",
+        helpContactText: "Si necesitas más ayuda o tienes sugerencias, contacta al creador del programa por discord<br><br>Usuario: &quot;ele.exe&quot;",
+
+        iconCreatorButton: "Creador de iconos",
+        iconCreatorTitle: "Creador de iconos",
+        iconCreatorBack: "Volver al creador",
+        iconCreatorIntro: "Selecciona los dos iconos de la barra de vida. Cada icono se redimensionará a 150×150 px y el spritesheet final será de 300×150 px.",
+        iconNeutralTitle: "Icono neutral",
+        iconLosingTitle: "Icono perdiendo",
+        generateIcon: "Generar spritesheet 300×150",
+        downloadIcon: "Descargar spritesheet 300×150",
+        iconResultTitle: "Spritesheet generado",
+        iconResultInfo: "Cada icono: 150×150 px | Spritesheet final: 300×150 px",
+        iconNeedBoth: "Selecciona los dos iconos antes de generar el spritesheet.",
+        pngError: "No se pudo generar el PNG.",
+
+        description:
+            "Esta herramienta permite crear spritesheets y archivos XML para personajes de Friday Night Funkin'. Puedes subir tus frames, organizarlos automáticamente, renombrarlos y generar un ZIP listo para utilizar en tu juego. Fue pensado especialmente para usuarios de móvil, ya que en un teléfono puede ser un poco más complicado preparar sprites para el juego.",
+
+        installApp: "📱 Instalar ELETool",
+        installHint: "Instala ELETool en la pantalla de inicio para abrirlo como una aplicación.",
+
+        resolutionWarning:
+            "⚠️ Para evitar errores, todos los frames de las secciones de animación deberían tener la misma resolución, tanto de ancho como de alto. Por ejemplo, si tus frames de Idle son 1024×1024 px, es recomendable que los frames de Left, Down, Up, Right y de las demás secciones de animación también sean 1024×1024 px. Si el ZIP no se quiere generar, tal vez se deba a que no todos los frames tienen la misma resolución.",
+
+        addSection:
+            "Agregar sección con XML y renombrado",
+
+        spritesheetCreatorButton:
+            "Creador de Spritesheet sin XML",
+
+        spritesheetCreatorTitle:
+            "Creador de Spritesheet sin XML",
+
+        spritesheetCreatorIntro:
+            "Crea un spritesheet independiente sin XML ni renombrado. Los nombres originales de tus imágenes se conservan.",
+
+        spritesheetCreatorGenerate:
+            "Generar spritesheet",
+
+        spritesheetCreatorDownload:
+            "Descargar PNG",
+
+        spritesheetCreatorResult:
+            "Spritesheet generado",
+
+        spritesheetCreatorBack:
+            "Volver al creador",
+
+        spritesheetCreatorEmpty:
+            "Selecciona al menos una imagen.",
+
+        spritesheetCreatorStats:
+            "imágenes | distribución",
+
+        packageName:
+            "Nombre del paquete",
+
+        packagePlaceholder:
+            "Personaje",
+
+        noFrames:
+            "No hay frames cargados.",
+
+        generate:
+            "Generar ZIP",
+
+        preview:
+            "Vista previa",
+
+        renameLabel:
+            "Nombre base de los frames",
+
+        renameHelp:
+            "Se añadirá automáticamente 0000, 0001, 0002...",
+
+        renameButton:
+            "Renombrar todos los frames",
+
+        idleGuide:
+            "Suba su pose idle aquí",
+
+        leftGuide:
+            "Suba sus poses de izquierda aquí",
+
+        downGuide:
+            "Suba sus poses de abajo aquí",
+
+        upGuide:
+            "Suba sus poses de arriba aquí",
+
+        rightGuide:
+            "Suba sus poses de derecha aquí",
+
+        extraGuide:
+            "Suba sus frames aquí",
+
+        idleExample:
+            "Personajeidle",
+
+        leftExample:
+            "Personajeleft",
+
+        downExample:
+            "Personajedown",
+
+        upExample:
+            "Personajeup",
+
+        rightExample:
+            "Personajeright",
+
+        extraExample:
+            "Personaje",
+
+        sectionExtra:
+            "Sección adicional",
+
+        spritesheetSection:
+            "Spritesheet",
+
+        spritesheetOnly:
+            "Spritesheet",
+
+        spritesheetGuide:
+            "Suba aquí las imágenes para crear un spritesheet sin XML ni renombrado.",
+
+        spritesheetOutput:
+            "Spritesheet genérico",
+
+        frames:
+            "frames",
+
+        frame:
+            "frame",
+
+        loading:
+            "Cargando...",
+
+        loadError:
+            "Error al cargar",
+
+        totalFrames:
+            "Frames totales",
+
+        loadedFrames:
+            "Frames cargados",
+
+        distribution:
+            "Distribución automática",
+
+        maxResolution:
+            "Resolución máxima de frame",
+
+        sheetResolution:
+            "Resolución del spritesheet",
+
+        canvasSize:
+            "Tamaño aproximado del canvas",
+
+        errors:
+            "Hay",
+
+        framesWithError:
+            "frame(s) con error.",
+
+        noFramesGenerate:
+            "No hay frames para generar.",
+
+        enterPackage:
+            "Escribe un nombre para el paquete.",
+
+        invalidPackage:
+            "El nombre del paquete no es válido.",
+
+        uploadFirst:
+            "Primero sube algunos frames a esta sección.",
+
+        clearAllFrames:
+            "Borrar todos los frames",
+
+        clearAllFramesConfirm:
+            "¿Quieres borrar todos los frames de esta sección?",
+
+        enterBase:
+            "Escribe un nombre base para los frames.",
+
+        invalidName:
+            "El nombre no es válido.",
+
+
+        deleteSectionConfirm:
+            "¿Quieres eliminar esta sección?",
+
+        deleteSection:
+            "Eliminar esta sección",
+
+        pngError:
+            "No se pudo generar el PNG.",
+
+        zipSuccess:
+            "ZIP generado correctamente.",
+
+        contains:
+            "Contiene:",
+
+        downloads:
+            "Después de generar el ZIP, revisa la carpeta de Descargas de tu dispositivo."
+
+    },
+
+
+    en: {
+
+        title:
+            "Sprite Creator (FNF)",
+
+        idleTitle: "Idle pose",
+        leftTitle: "Left pose",
+        downTitle: "Down pose",
+        upTitle: "Up pose",
+        rightTitle: "Right pose",
+
+        animationViewerTitle: "Animation Viewer",
+        animationViewerIntro: "Play your section animations in a loop at the FPS you choose.",
+        animationIdle: "Idle",
+        animationLeft: "Left pose",
+        animationDown: "Down pose",
+        animationUp: "Up pose",
+        animationRight: "Right pose",
+        animationSelect: "Choose animation",
+        animationFps: "FPS",
+        animationEmpty: "Select an animation with frames to play it.",
+        animationNoFrames: "This animation has no loaded frames.",
+        animationFrames: "frames",
+        customAnimationName: "Animation name",
+        customAnimationPlaceholder: "e.g. hey",
+        animationNeedName: "Give this section a name to show it in the viewer.",
+
+        helpTitle: "Help",
+        helpBack: "Back to creator",
+        helpIntro: "Here you can find information about the sprite sheet creator's features.",
+        helpGeneralTitle: "What does this program do?",
+        helpGeneralText: "It lets you organize images, create sprite sheets automatically, rename frames and generate the files needed to use them in Friday Night Funkin' mods.",
+        helpNormalTitle: "XML + rename sections",
+        helpNormalText: "The Idle, Left, Down, Up and Right sections are intended for a character's poses. You can upload several frames, set a base name and rename them automatically with four-digit numbers.",
+        helpGenericTitle: "Spritesheet sections",
+        helpGenericText: "You can add extra sections for images that only need to be turned into a sprite sheet. These sections do not generate XML or change the original image names.",
+        helpGridTitle: "Automatic layout",
+        helpGridText: "The program automatically calculates the rows and columns according to the number of frames. You do not need to choose the number of columns manually.",
+        helpNamingTitle: "Frame and package names",
+        helpNamingText: "The package name is used for the main generated files. Normal frame names can be generated automatically and are saved in lowercase.",
+        helpMissTitle: "Do your poses briefly show the “miss” poses?",
+        helpMissText: "If your spritesheets load incorrectly in the game and some poses briefly show their “miss” poses, rename every normal pose so it is different from its miss pose. For example, if you have Personajeleft and Personajemissleft, change Personajeleft to Personajeleftt by adding an extra letter at the end to avoid problems.",
+        helpTipsTitle: "Tips",
+        helpTip1: "Use images with transparency when your character or element needs a transparent background.",
+        helpTip2: "Check the preview and statistics before generating the ZIP.",
+        helpTip3: "If you add a section you no longer need, you can delete it from that section.",
+        helpContactTitle: "Need more help?",
+        helpContactText: "If you need more help or have suggestions, contact the program creator on Discord.<br><br>Username: &quot;ele.exe&quot;",
+
+        iconCreatorButton: "Icon Creator",
+        iconCreatorTitle: "Icon Creator",
+        iconCreatorBack: "Back to creator",
+        iconCreatorIntro: "Select the two health bar icons. Each one will be resized to 150×150 px and the final spritesheet will be 300×150 px.",
+        iconNeutralTitle: "Neutral icon",
+        iconLosingTitle: "Losing icon",
+        generateIcon: "Generate spritesheet 300×150",
+        downloadIcon: "Download spritesheet 300×150",
+        iconResultTitle: "Spritesheet generated",
+        iconResultInfo: "Each icon: 150×150 px | Final spritesheet: 300×150 px",
+        iconNeedBoth: "Select both icons before generating the spritesheet.",
+        pngError: "The PNG could not be generated.",
+
+        description:
+            "This tool allows you to create spritesheets and XML files for Friday Night Funkin' characters. You can upload your frames, organize them automatically, rename them and generate a ZIP ready to use in your game. It was designed especially for mobile users, since preparing sprites for the game can be a little more complicated on a phone.",
+
+        installApp: "📱 Install ELETool",
+        installHint: "Install ELETool on your home screen to open it like an app.",
+
+        resolutionWarning:
+            "⚠️ To avoid errors, all frames in the animation sections should ideally have the same resolution in both width and height. For example, if your Idle frames are 1024×1024 px, it is recommended that the frames in Left, Down, Up, Right, and any other animation sections also be 1024×1024 px. If the ZIP does not want to generate, it may be because not all frames have the same resolution.",
+
+        addSection:
+            "Add XML + rename section",
+
+        spritesheetCreatorButton:
+            "Spritesheet Creator without XML",
+
+        spritesheetCreatorTitle:
+            "Spritesheet Creator without XML",
+
+        spritesheetCreatorIntro:
+            "Create an independent spritesheet without XML or renaming. Your original image names are preserved.",
+
+        spritesheetCreatorGenerate:
+            "Generate spritesheet",
+
+        spritesheetCreatorDownload:
+            "Download PNG",
+
+        spritesheetCreatorResult:
+            "Spritesheet generated",
+
+        spritesheetCreatorBack:
+            "Back to creator",
+
+        spritesheetCreatorEmpty:
+            "Select at least one image.",
+
+        spritesheetCreatorStats:
+            "images | layout",
+
+        packageName:
+            "Package name",
+
+        packagePlaceholder:
+            "Character",
+
+        noFrames:
+            "No frames loaded.",
+
+        generate:
+            "Generate ZIP",
+
+        preview:
+            "Preview",
+
+        renameLabel:
+            "Base frame name",
+
+        renameHelp:
+            "0000, 0001, 0002... will be added automatically",
+
+        renameButton:
+            "Rename all frames",
+
+        idleGuide:
+            "Upload your idle pose here",
+
+        leftGuide:
+            "Upload your left poses here",
+
+        downGuide:
+            "Upload your down poses here",
+
+        upGuide:
+            "Upload your up poses here",
+
+        rightGuide:
+            "Upload your right poses here",
+
+        extraGuide:
+            "Upload your frames here",
+
+        idleExample:
+            "Characteridle",
+
+        leftExample:
+            "Characterleft",
+
+        downExample:
+            "Characterdown",
+
+        upExample:
+            "Characterup",
+
+        rightExample:
+            "Characterright",
+
+        extraExample:
+            "Character",
+
+        sectionExtra:
+            "Additional section",
+
+        spritesheetSection:
+            "Spritesheet",
+
+        spritesheetOnly:
+            "Spritesheet",
+
+        spritesheetGuide:
+            "Upload images here to create a spritesheet without XML or renaming.",
+
+        spritesheetOutput:
+            "Generic spritesheet",
+
+        frames:
+            "frames",
+
+        frame:
+            "frame",
+
+        loading:
+            "Loading...",
+
+        loadError:
+            "Loading error",
+
+        totalFrames:
+            "Total frames",
+
+        loadedFrames:
+            "Loaded frames",
+
+        distribution:
+            "Automatic distribution",
+
+        maxResolution:
+            "Maximum frame resolution",
+
+        sheetResolution:
+            "Spritesheet resolution",
+
+        canvasSize:
+            "Approximate canvas size",
+
+        errors:
+            "There are",
+
+        framesWithError:
+            "frame(s) with errors.",
+
+        noFramesGenerate:
+            "There are no frames to generate.",
+
+        enterPackage:
+            "Enter a package name.",
+
+        invalidPackage:
+            "The package name is not valid.",
+
+        uploadFirst:
+            "Upload some frames to this section first.",
+
+        clearAllFrames:
+            "Delete all frames",
+
+        clearAllFramesConfirm:
+            "Do you want to delete all frames from this section?",
+
+        enterBase:
+            "Enter a base name for the frames.",
+
+        invalidName:
+            "The name is not valid.",
+
+
+        deleteSectionConfirm:
+            "Do you want to delete this section?",
+
+        deleteSection:
+            "Delete this section",
+
+        pngError:
+            "The PNG could not be generated.",
+
+        zipSuccess:
+            "ZIP generated successfully.",
+
+        contains:
+            "Contains:",
+
+        downloads:
+            "After generating the ZIP, check your device's Downloads folder."
+
+    }
+
+};
+
+
+/* =========================================================
+   FUNCIÓN DE TRADUCCIÓN
+========================================================= */
+
+function t(key) {
+
+    return translations[currentLanguage][key];
+
+}
+
+
+/* =========================================================
+   SECCIONES
+========================================================= */
+
+let sections = [];
+
+let nextSectionId = 1;
+
+
+/* =========================================================
+   CREAR SECCIÓN
+========================================================= */
+
+function createSection(
+    titleKey,
+    guideKey,
+    exampleKey,
+    isSpritesheetOnly = false,
+    isDeletable = false
+) {
+
+    const section = {
+
+        id:
+            nextSectionId++,
+
+        title:
+            titleKey || "",
+
+        titleKey:
+            titleKey || null,
+
+        isSpritesheetOnly:
+            isSpritesheetOnly,
+
+        isDeletable:
+            isDeletable,
+
+        guideKey:
+            guideKey,
+
+        exampleKey:
+            exampleKey,
+
+        frames: [],
+
+        input: null,
+
+        clearFramesButton: null,
+
+        nameInput: null,
+
+        animationName: "",
+        animationNameInput: null,
+
+        titleElement: null,
+
+        guideElement: null,
+
+        statsElement: null,
+
+
+    };
+
+
+    sections.push(section);
+
+    renderSection(section);
+
+    updateEverything();
+
+}
+
+
+/* =========================================================
+   RENDERIZAR SECCIÓN
+========================================================= */
+
+function renderSection(section) {
+
+    const container =
+        document.getElementById("sections");
+
+
+    const box =
+        document.createElement("div");
+
+
+    box.className =
+        "section";
+
+
+    box.dataset.sectionId =
+        section.id;
+
+
+    const title =
+        document.createElement("h2");
+
+
+    title.textContent =
+        section.titleKey ? t(section.titleKey) :
+        t("sectionExtra");
+
+
+    section.titleElement =
+        title;
+
+
+    box.appendChild(title);
+
+    // Las secciones XML adicionales tienen un nombre propio para identificarlas en el visor.
+    if (section.isDeletable && !section.isSpritesheetOnly) {
+        const animationNameBox = document.createElement("div");
+        animationNameBox.className = "rename-box animation-name-box";
+
+        const animationNameLabel = document.createElement("label");
+        animationNameLabel.className = "rename-label";
+        animationNameLabel.textContent = t("customAnimationName");
+        animationNameBox.appendChild(animationNameLabel);
+
+        const animationNameInput = document.createElement("input");
+        animationNameInput.type = "text";
+        animationNameInput.className = "name-input";
+        animationNameInput.placeholder = t("customAnimationPlaceholder");
+        animationNameInput.addEventListener("input", function() {
+            section.animationName = animationNameInput.value.trim();
+            updateAnimationViewer();
+        });
+        section.animationNameInput = animationNameInput;
+        animationNameBox.appendChild(animationNameInput);
+        box.appendChild(animationNameBox);
+    }
+
+
+    const guide =
+        document.createElement("div");
+
+
+    guide.className =
+        "guide";
+
+
+    guide.textContent =
+        t(section.guideKey);
+
+
+    section.guideElement =
+        guide;
+
+
+    box.appendChild(guide);
+
+    /* =========================
+       ELIMINAR SECCIÓN
+    ========================= */
+
+    if (section.isDeletable) {
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "delete-section";
+        deleteButton.textContent = t("deleteSection");
+        deleteButton.addEventListener("click", async function() {
+            if (!(await awaitConfirm(t("deleteSectionConfirm")))) return;
+
+            section.frames.forEach(function(frame) {
+                if (frame.objectURL) URL.revokeObjectURL(frame.objectURL);
+            });
+
+            const index = sections.indexOf(section);
+            if (index !== -1) sections.splice(index, 1);
+            box.remove();
+            updateEverything();
+            updateAnimationViewer();
+        });
+        box.appendChild(deleteButton);
+    }
+
+
+    /* =========================
+       INPUT
+    ========================= */
+
+    const fileInput =
+        document.createElement("input");
+
+
+    fileInput.type =
+        "file";
+
+
+    fileInput.multiple =
+        true;
+
+
+    fileInput.accept =
+        "image/png,image/jpeg,image/webp";
+
+
+    fileInput.className =
+        "file-input";
+
+
+    section.input =
+        fileInput;
+
+
+    box.appendChild(fileInput);
+
+
+    /* =========================
+       RENOMBRADO
+    ========================= */
+
+    if (section.isSpritesheetOnly) {
+        // Esta sección no usa nombres de animación ni numeración.
+    } else {
+
+    const renameBox =
+        document.createElement("div");
+
+
+    renameBox.className =
+        "rename-box";
+
+
+    const renameLabel =
+        document.createElement("label");
+
+
+    renameLabel.className =
+        "rename-label";
+
+
+    renameLabel.textContent =
+        t("renameLabel");
+
+
+    renameBox.appendChild(renameLabel);
+
+
+    const nameInput =
+        document.createElement("input");
+
+
+    nameInput.type =
+        "text";
+
+
+    nameInput.className =
+        "name-input";
+
+
+    nameInput.placeholder =
+        t(section.exampleKey);
+
+
+    section.nameInput =
+        nameInput;
+
+
+    /*
+     * Convertir lo escrito a minúsculas
+     * inmediatamente.
+     */
+
+    nameInput.addEventListener(
+        "input",
+        function() {
+
+            const position =
+                nameInput.selectionStart;
+
+
+            nameInput.value =
+                nameInput.value.toLowerCase();
+
+
+            try {
+
+                nameInput.setSelectionRange(
+                    position,
+                    position
+                );
+
+            } catch (e) {}
+
+        }
+    );
+
+
+    renameBox.appendChild(nameInput);
+
+
+    const renameHelp =
+        document.createElement("div");
+
+
+    renameHelp.className =
+        "rename-help";
+
+
+
+
+    renameHelp.textContent =
+        t("renameHelp");
+
+    renameBox.appendChild(renameHelp);
+
+
+    const renameButton =
+        document.createElement("button");
+
+    renameButton.type = "button";
+    renameButton.className = "rename-button";
+    renameButton.textContent = t("renameButton");
+
+    renameButton.addEventListener("click", function() {
+        renameAllFrames(section);
+    });
+
+    renameBox.appendChild(renameButton);
+    box.appendChild(renameBox);
+
+    } // fin del bloque de renombrado
+
+
+    /* =========================
+       ESTADÍSTICAS
+    ========================= */
+
+    const stats = document.createElement("div");
+    stats.className = "stats";
+    section.statsElement = stats;
+    box.appendChild(stats);
+
+
+    /* =========================
+       FRAMES
+    ========================= */
+
+    const framesBox = document.createElement("div");
+    framesBox.className = "frames";
+    section.framesElement = framesBox;
+    box.appendChild(framesBox);
+
+    const clearFramesButton = document.createElement("button");
+    clearFramesButton.type = "button";
+    clearFramesButton.className = "clear-frames-button";
+    clearFramesButton.textContent = t("clearAllFrames");
+    clearFramesButton.style.display = "none";
+    clearFramesButton.addEventListener("click", function() {
+        if (!section.frames.length) return;
+        if (!(awaitConfirm(t("clearAllFramesConfirm")))) return;
+
+        section.frames.forEach(function(frame) {
+            if (frame.objectURL) URL.revokeObjectURL(frame.objectURL);
+        });
+
+        section.frames = [];
+        if (section.input) section.input.value = "";
+
+        updateEverything();
+        updateAnimationViewer();
+    });
+    section.clearFramesButton = clearFramesButton;
+    box.appendChild(clearFramesButton);
+
+
+    /* =========================
+       INPUT EVENT
+    ========================= */
+
+    fileInput.addEventListener("change", function() {
+        const files = Array.from(fileInput.files || []);
+
+        files.forEach(function(file) {
+            if (!file.type.startsWith("image/")) return;
+
+            const frame = {
+                file: file,
+                outputName: file.name.toLowerCase(),
+                width: 0,
+                height: 0,
+                image: null,
+                objectURL: URL.createObjectURL(file),
+                loaded: false,
+                error: false
+            };
+
+            section.frames.push(frame);
+            loadFrame(frame, section);
+        });
+
+        fileInput.value = "";
+        updateEverything();
+        updateAnimationViewer();
+    });
+
+    section.box = box;
+    container.appendChild(box);
+}
+
+
+/* =========================================================
+   VISOR DE ANIMACIONES
+========================================================= */
+
+let selectedAnimationSectionId = null;
+let animationViewerTimer = null;
+let animationViewerFrameIndex = 0;
+let animationViewerLastTimestamp = 0;
+let animationViewerPlaying = false;
+
+function getAnimationSections() {
+    return sections.filter(function(section) {
+        return !section.isSpritesheetOnly;
+    });
+}
+
+function getAnimationLabel(section) {
+    if (section.isDeletable) {
+        return section.animationName || "";
+    }
+    const labels = {
+        idleTitle: "animationIdle",
+        leftTitle: "animationLeft",
+        downTitle: "animationDown",
+        upTitle: "animationUp",
+        rightTitle: "animationRight"
+    };
+    return section.titleKey && labels[section.titleKey]
+        ? t(labels[section.titleKey])
+        : (section.titleKey ? t(section.titleKey) : t("sectionExtra"));
+}
+
+function stopAnimationViewer() {
+    animationViewerPlaying = false;
+    animationViewerLastTimestamp = 0;
+    if (animationViewerTimer !== null) {
+        cancelAnimationFrame(animationViewerTimer);
+        animationViewerTimer = null;
+    }
+}
+
+function getSelectedAnimationSection() {
+    return sections.find(function(section) {
+        return section.id === selectedAnimationSectionId;
+    }) || null;
+}
+
+function renderAnimationFrame(section) {
+    const image = document.getElementById("animationPreviewImage");
+    const empty = document.getElementById("animationEmptyText");
+    const status = document.getElementById("animationStatus");
+    if (!image || !empty || !status) return;
+
+    const frames = section ? section.frames.filter(function(frame) {
+        return frame.loaded && frame.image && frame.objectURL;
+    }) : [];
+
+    if (!frames.length) {
+        image.style.display = "none";
+        empty.style.display = "block";
+        empty.textContent = section ? t("animationNoFrames") : t("animationEmpty");
+        status.textContent = "";
+        return;
+    }
+
+    if (animationViewerFrameIndex >= frames.length) animationViewerFrameIndex = 0;
+    image.src = frames[animationViewerFrameIndex].objectURL;
+    image.style.display = "block";
+    empty.style.display = "none";
+    const fps = getAnimationFps();
+    status.textContent = getAnimationLabel(section) + " | " + frames.length + " " + t("animationFrames") + " | " + (fps === null ? "—" : fps) + " FPS";
+}
+
+function getAnimationFps() {
+    const input = document.getElementById("animationFpsInput");
+    if (!input || input.value.trim() === "") return null;
+    let fps = Number(input.value);
+    if (!Number.isFinite(fps)) return null;
+    fps = Math.max(1, Math.min(60, Math.round(fps)));
+    return fps;
+}
+
+function normalizeAnimationFpsInput() {
+    const input = document.getElementById("animationFpsInput");
+    if (!input || input.value.trim() === "") return;
+    let fps = Number(input.value);
+    if (!Number.isFinite(fps)) { input.value = ""; return; }
+    input.value = Math.max(1, Math.min(60, Math.round(fps)));
+}
+
+function animationViewerLoop(timestamp) {
+    if (!animationViewerPlaying) return;
+
+    const section = getSelectedAnimationSection();
+    if (!section) {
+        stopAnimationViewer();
+        renderAnimationFrame(null);
+        return;
+    }
+
+    const frames = section.frames.filter(function(frame) {
+        return frame.loaded && frame.image && frame.objectURL;
+    });
+    if (!frames.length) {
+        stopAnimationViewer();
+        renderAnimationFrame(section);
+        return;
+    }
+
+    const fps = getAnimationFps();
+    if (fps === null) {
+        animationViewerPlaying = false;
+        animationViewerTimer = null;
+        return;
+    }
+    const interval = 1000 / fps;
+    if (!animationViewerLastTimestamp) animationViewerLastTimestamp = timestamp;
+
+    if (timestamp - animationViewerLastTimestamp >= interval) {
+        const steps = Math.max(1, Math.floor((timestamp - animationViewerLastTimestamp) / interval));
+        animationViewerFrameIndex = (animationViewerFrameIndex + steps) % frames.length;
+        animationViewerLastTimestamp = timestamp;
+        renderAnimationFrame(section);
+    }
+
+    animationViewerTimer = requestAnimationFrame(animationViewerLoop);
+}
+
+function startAnimationViewer() {
+    stopAnimationViewer();
+    const section = getSelectedAnimationSection();
+    if (!section) {
+        renderAnimationFrame(null);
+        return;
+    }
+    const frames = section.frames.filter(function(frame) {
+        return frame.loaded && frame.image && frame.objectURL;
+    });
+    if (!frames.length) {
+        renderAnimationFrame(section);
+        return;
+    }
+    animationViewerPlaying = true;
+    animationViewerFrameIndex = 0;
+    renderAnimationFrame(section);
+    animationViewerTimer = requestAnimationFrame(animationViewerLoop);
+}
+
+function selectAnimationSection(section) {
+    if (!section) return;
+    selectedAnimationSectionId = section.id;
+    animationViewerFrameIndex = 0;
+    document.getElementById("animationSelectButton").textContent = getAnimationLabel(section) || t("animationSelect");
+    document.getElementById("animationSelectMenu").style.display = "none";
+    startAnimationViewer();
+}
+
+function updateAnimationViewer() {
+    const menu = document.getElementById("animationSelectMenu");
+    if (!menu) return;
+
+    const animationSections = getAnimationSections().filter(function(section) {
+        if (!section.isDeletable) return true;
+        return !!getAnimationLabel(section) && section.frames.some(function(frame) {
+            return frame.loaded && frame.image;
+        });
+    });
+
+    menu.innerHTML = "";
+
+    animationSections.forEach(function(section) {
+        const label = getAnimationLabel(section);
+        if (!label) return;
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "animation-option-button";
+        button.textContent = label;
+        button.addEventListener("click", function() {
+            selectAnimationSection(section);
+        });
+        menu.appendChild(button);
+    });
+
+    const current = getSelectedAnimationSection();
+    const currentStillAvailable = current && animationSections.includes(current);
+
+    if (!currentStillAvailable) {
+        const firstWithFrames = animationSections.find(function(section) {
+            return section.frames.some(function(frame) { return frame.loaded && frame.image; });
+        });
+        selectedAnimationSectionId = firstWithFrames ? firstWithFrames.id : null;
+    }
+
+    const selected = getSelectedAnimationSection();
+    document.getElementById("animationSelectButton").textContent = selected ? getAnimationLabel(selected) : t("animationSelect");
+    if (selected) renderAnimationFrame(selected);
+    else renderAnimationFrame(null);
+}
+
+/* =========================================================
+   SECCIÓN ESPECIAL DE SPRITESHEET
+========================================================= */
+
+function createSpritesheetSection() {
+    const section = createSection(
+        "spritesheetSection",
+        "spritesheetGuide",
+        null,
+        true,
+        true
+    );
+    return section;
+}
+
+
+
+/* =========================================================
+   CARGAR IMAGEN
+========================================================= */
+
+function loadFrame(frame, section) {
+    const img = new Image();
+
+    img.onload = function() {
+        frame.image = img;
+        frame.width = img.naturalWidth;
+        frame.height = img.naturalHeight;
+        frame.loaded = true;
+        frame.error = false;
+        updateEverything();
+        updateAnimationViewer();
+        // Al cargar un frame, esta sección pasa automáticamente a ser la animación activa.
+        selectedAnimationSectionId = section.id;
+        animationViewerFrameIndex = 0;
+        document.getElementById("animationSelectButton").textContent = getAnimationLabel(section) || t("animationSelect");
+        startAnimationViewer();
+    };
+
+    img.onerror = function() {
+        frame.loaded = false;
+        frame.error = true;
+        updateEverything();
+        updateAnimationViewer();
+    };
+
+    img.src = frame.objectURL;
+}
+
+
+/* =========================================================
+   MOSTRAR FRAMES
+========================================================= */
+
+function renderFrames(section) {
+    const box = section.framesElement;
+    if (!box) return;
+
+    box.innerHTML = "";
+
+    if (section.clearFramesButton) {
+        section.clearFramesButton.style.display = section.frames.length > 0 ? "block" : "none";
+        section.clearFramesButton.textContent = t("clearAllFrames");
+    }
+
+    section.frames.forEach(function(frame, index) {
+        const item = document.createElement("div");
+        item.className = "frame";
+
+        if (frame.image && frame.loaded) {
+            const img = document.createElement("img");
+            img.src = frame.objectURL;
+            img.alt = frame.outputName;
+            img.style.maxWidth = "100%";
+            img.style.maxHeight = "180px";
+            img.style.objectFit = "contain";
+            item.appendChild(img);
+        }
+
+        if (frame.loaded && frame.width > 0 && frame.height > 0) {
+            const resolution = document.createElement("div");
+            resolution.className = "frame-resolution";
+            resolution.textContent = `${frame.width}×${frame.height}`;
+            item.appendChild(resolution);
+        }
+
+        const name = document.createElement("div");
+        name.style.fontSize = "12px";
+        name.style.marginTop = "6px";
+        name.style.wordBreak = "break-all";
+        name.textContent = section.isSpritesheetOnly
+            ? frame.file.name
+            : frame.outputName;
+        item.appendChild(name);
+
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.textContent = "✕";
+        remove.title = t("removeFrame");
+        remove.style.position = "absolute";
+        remove.style.top = "5px";
+        remove.style.right = "5px";
+        remove.addEventListener("click", function() {
+            if (frame.objectURL) URL.revokeObjectURL(frame.objectURL);
+            section.frames.splice(index, 1);
+
+            if (!section.isSpritesheetOnly) {
+                const base = getBaseFromOutputName(section.frames[0]);
+                if (base !== null) {
+                    section.frames.forEach(function(item, i) {
+                        item.outputName = `${base}${String(i).padStart(4, "0")}.png`;
+                    });
+                }
+            }
+
+            renderFrames(section);
+            updateEverything();
+            updateAnimationViewer();
+        });
+        item.appendChild(remove);
+
+        box.appendChild(item);
+    });
+}
+
+
+/* =========================================================
+   RENOMBRAR
+========================================================= */
+
+function renameAllFrames(section) {
+    if (section.isSpritesheetOnly) return;
+
+    if (!section.frames.length) {
+        return;
+    }
+
+    let baseName = section.nameInput.value.trim();
+    baseName = baseName.toLowerCase();
+    baseName = baseName.replace(/\.(png|jpg|jpeg|webp)$/i, "");
+    baseName = baseName.replace(/[\\/:*?"<>|]/g, "_");
+    baseName = baseName.toLowerCase();
+
+    if (!baseName) {
+        showMessage(t("enterBase"), true);
+        return;
+    }
+
+    section.frames.forEach(function(frame, index) {
+        const number = String(index).padStart(4, "0");
+        frame.outputName = `${baseName}${number}.png`;
+    });
+
+    renderFrames(section);
+    updateEverything();
+}
+
+
+function getBaseFromOutputName(frame) {
+    if (!frame) return null;
+    const match = frame.outputName.match(/^(.*?)(\d{4})\.png$/i);
+    if (!match) return null;
+    return match[1].toLowerCase();
+}
+
+
+/* =========================================================
+   DISTRIBUCIÓN
+========================================================= */
+
+function getGrid(count) {
+    if (!count) return { columns: 0, rows: 0 };
+
+    const columns = Math.ceil(Math.sqrt(count));
+    const rows = Math.ceil(count / columns);
+
+    return { columns, rows };
+}
+
+
+/* =========================================================
+   RESUMEN / ESTADÍSTICAS
+========================================================= */
+
+function updateEverything() {
+    sections.forEach(function(section) {
+        renderFrames(section);
+        updateSectionStats(section);
+    });
+
+    const total = sections.reduce(function(sum, section) {
+        return sum + section.frames.length;
+    }, 0);
+
+    const summary = document.getElementById("summary");
+    if (summary) {
+        summary.textContent = total
+            ? `${t("totalFrames")}: ${total}`
+            : t("noFrames");
+    }
+
+    const generateBtn = document.getElementById("generateBtn");
+    if (generateBtn) {
+        generateBtn.disabled = total === 0;
+        generateBtn.title = "";
+    }
+}
+
+
+function updateSectionStats(section) {
+    if (!section.statsElement) return;
+
+    const count = section.frames.length;
+    const loaded = section.frames.filter(function(frame) {
+        return frame.loaded;
+    }).length;
+    const errors = section.frames.filter(function(frame) {
+        return frame.error;
+    }).length;
+
+    if (!count) {
+        section.statsElement.textContent = "";
+        return;
+    }
+
+    const grid = getGrid(count);
+    let maxW = 0;
+    let maxH = 0;
+
+    section.frames.forEach(function(frame) {
+        maxW = Math.max(maxW, frame.width || 0);
+        maxH = Math.max(maxH, frame.height || 0);
+    });
+
+    section.statsElement.textContent =
+        `${t("totalFrames")}: ${count} | ` +
+        `${t("loadedFrames")}: ${loaded} | ` +
+        `${t("distribution")}: ${grid.columns} × ${grid.rows}` +
+        (maxW && maxH ? ` | ${t("maxResolution")}: ${maxW}×${maxH}` : "") +
+        (errors ? ` | ${t("errors")}: ${errors} ${t("framesWithError")}` : "");
+}
+
+
+/* =========================================================
+   GENERAR SPRITESHEET
+========================================================= */
+
+async function buildSpritesheet(frames) {
+    const usable = frames.filter(function(frame) {
+        return frame.loaded && frame.image && frame.width > 0 && frame.height > 0;
+    });
+
+    if (!usable.length) return null;
+
+    const grid = getGrid(usable.length);
+    const cellWidth = Math.max.apply(null, usable.map(function(f) { return f.width; }));
+    const cellHeight = Math.max.apply(null, usable.map(function(f) { return f.height; }));
+
+    const canvas = document.createElement("canvas");
+    canvas.width = cellWidth * grid.columns;
+    canvas.height = cellHeight * grid.rows;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("canvas");
+
+    // El canvas comienza transparente y NO se rellena con ningún color.
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    usable.forEach(function(frame, index) {
+        const x = (index % grid.columns) * cellWidth;
+        const y = Math.floor(index / grid.columns) * cellHeight;
+        ctx.drawImage(frame.image, x, y);
+    });
+
+    const blob = await new Promise(function(resolve, reject) {
+        canvas.toBlob(function(result) {
+            if (result) resolve(result);
+            else reject(new Error("toBlob"));
+        }, "image/png");
+    });
+
+    return {
+        blob: blob,
+        width: canvas.width,
+        height: canvas.height,
+        cellWidth: cellWidth,
+        cellHeight: cellHeight,
+        frames: usable
+    };
+}
+
+
+function buildXML(allNormalFrames, spritesheetFileName) {
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<!-- Hecho por la página https://eleepunto-exe.github.io/Creador-de-Spritesheets-y-XML/ - creada por ELE -->\n`;
+    xml += `<TextureAtlas imagePath="${escapeXML(spritesheetFileName || "spritesheet.png")}">\n`;
+
+    const valid = allNormalFrames.filter(function(frame) {
+        return frame.loaded && frame.image;
+    });
+
+    if (!valid.length) {
+        xml += `</TextureAtlas>`;
+        return xml;
+    }
+
+    const grid = getGrid(valid.length);
+    const cellWidth = Math.max.apply(null, valid.map(function(f) { return f.width; }));
+    const cellHeight = Math.max.apply(null, valid.map(function(f) { return f.height; }));
+
+    valid.forEach(function(frame, index) {
+        const x = (index % grid.columns) * cellWidth;
+        const y = Math.floor(index / grid.columns) * cellHeight;
+        const frameName = frame.outputName.toLowerCase();
+
+        xml += `    <SubTexture name="${escapeXML(frameName)}" x="${x}" y="${y}" width="${frame.width}" height="${frame.height}"/>\n`;
+    });
+
+    xml += `</TextureAtlas>`;
+    return xml;
+}
+
+
+function escapeXML(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/'/g, "&apos;");
+}
+
+
+/* =========================================================
+   GENERAR ZIP
+========================================================= */
+
+async function generateZIP() {
+    const button = document.getElementById("generateBtn");
+    button.disabled = true;
+
+    try {
+        let packageName = document.getElementById("packageName").value.trim();
+        packageName = packageName.toLowerCase();
+        packageName = packageName.replace(/\.(zip|png|xml)$/i, "");
+        packageName = packageName.replace(/[\\/:*?"<>|]/g, "_");
+        packageName = packageName.toLowerCase();
+
+        if (!packageName) {
+            showMessage(t("enterPackage"), true);
+            return;
+        }
+
+        const allFrames = sections.flatMap(function(section) {
+            return section.frames;
+        });
+
+        if (!allFrames.length) {
+            showMessage(t("noFramesGenerate"), true);
+            return;
+        }
+
+        const normalSections = sections.filter(function(section) {
+            return !section.isSpritesheetOnly;
+        });
+
+        const genericSections = sections.filter(function(section) {
+            return section.isSpritesheetOnly;
+        });
+
+
+        const normalFrames = normalSections.flatMap(function(section) {
+            return section.frames;
+        });
+
+        const zip = new JSZip();
+
+        /* Spritesheet principal + XML */
+        if (normalFrames.length) {
+            const sheet = await buildSpritesheet(normalFrames);
+            if (!sheet) throw new Error("png");
+
+            zip.file(`${packageName}.png`, sheet.blob, { compression: "STORE" });
+            zip.file(`${packageName}.xml`, buildXML(normalFrames, `${packageName}.png`), { compression: "STORE" });
+
+            const preview = document.getElementById("previewContainer");
+            const previewImage = document.getElementById("previewImage");
+            const previewTitle = document.getElementById("previewTitle");
+
+            previewImage.src = URL.createObjectURL(sheet.blob);
+            previewImage.style.maxWidth = "100%";
+            previewImage.style.height = "auto";
+            preview.style.display = "block";
+            previewTitle.textContent = t("preview");
+        }
+
+        /* Secciones genéricas: PNG independiente, sin XML y sin renombrar */
+        let genericIndex = 1;
+        for (const section of genericSections) {
+            if (!section.frames.length) continue;
+
+            const sheet = await buildSpritesheet(section.frames);
+            if (!sheet) continue;
+
+            const fileName = genericSections.length === 1
+                ? `${packageName}.png`
+                : `${packageName}_${genericIndex}.png`;
+
+            const genericPath = genericSections.length === 1
+                ? `spritesheets/${fileName}`
+                : `spritesheets/${fileName}`;
+
+            zip.file(genericPath.toLowerCase(), sheet.blob, { compression: "STORE" });
+            genericIndex++;
+        }
+
+
+        const zipBlob = await zip.generateAsync({
+            type: "blob",
+            compression: "STORE",
+            compressionOptions: { level: 0 }
+        });
+
+        downloadBlob(zipBlob, `${packageName}.zip`);
+        showMessage(t("zipSuccess") + "\n" + t("downloads"), false);
+
+    } catch (error) {
+        console.error(error);
+        showMessage(t("pngError"), true);
+    } finally {
+        button.disabled = sections.every(function(section) {
+            return section.frames.length === 0;
+        });
+    }
+}
+
+
+function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename.toLowerCase();
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function() { URL.revokeObjectURL(url); }, 3000);
+}
+
+
+/* =========================================================
+   MENSAJES
+========================================================= */
+
+function showMessage(text, isError) {
+    const message = document.getElementById("message");
+    message.textContent = text;
+    message.style.whiteSpace = "pre-line";
+    message.style.display = "block";
+    message.className = isError ? "message error" : "message success";
+}
+
+function awaitConfirm(text) {
+    return new Promise(function(resolve) {
+        const overlay = document.getElementById("appConfirmOverlay");
+        const message = document.getElementById("appConfirmText");
+        const cancel = document.getElementById("appConfirmCancel");
+        const ok = document.getElementById("appConfirmOk");
+        message.textContent = text;
+        overlay.style.display = "flex";
+        function finish(value) {
+            overlay.style.display = "none";
+            cancel.removeEventListener("click", onCancel);
+            ok.removeEventListener("click", onOk);
+            resolve(value);
+        }
+        function onCancel() { finish(false); }
+        function onOk() { finish(true); }
+        cancel.addEventListener("click", onCancel);
+        ok.addEventListener("click", onOk);
+    });
+}
+
+
+/* =========================================================
+   IDIOMA
+========================================================= */
+
+function updateLanguage() {
+    document.getElementById("mainTitle").textContent = t("title");
+    document.getElementById("appSubtitle").textContent = t("subtitle");
+    document.getElementById("description").textContent = t("description");
+    const installButton = document.getElementById("installAppButton");
+    if (installButton) {
+        installButton.textContent = t("installApp");
+        installButton.setAttribute("aria-label", t("installApp").replace(/^📱\s*/, ""));
+    }
+    const installHint = document.getElementById("installHint");
+    if (installHint) installHint.textContent = t("installHint");
+    document.getElementById("resolutionWarning").textContent = t("resolutionWarning");
+    document.getElementById("addNormalSectionText").textContent = t("addSection");
+    document.getElementById("spritesheetCreatorButtonText").textContent = t("spritesheetCreatorButton");
+    document.getElementById("packageLabel").textContent = t("packageName");
+    document.getElementById("packageName").placeholder = t("packagePlaceholder");
+    document.getElementById("generateBtn").textContent = t("generate");
+    document.getElementById("previewTitle").textContent = t("preview");
+
+    document.getElementById("animationViewerTitle").textContent = t("animationViewerTitle");
+    document.getElementById("animationViewerIntro").textContent = t("animationViewerIntro");
+    document.getElementById("animationFpsLabel").textContent = t("animationFps");
+    document.getElementById("animationEmptyText").textContent = t("animationEmpty");
+    updateAnimationViewer();
+
+    document.getElementById("helpTitle").textContent = t("helpTitle");
+    document.getElementById("helpBackButton").textContent = t("helpBack");
+    document.getElementById("helpIntro").textContent = t("helpIntro");
+    document.getElementById("helpGeneralTitle").textContent = t("helpGeneralTitle");
+    document.getElementById("helpGeneralText").textContent = t("helpGeneralText");
+    document.getElementById("helpNormalTitle").textContent = t("helpNormalTitle");
+    document.getElementById("helpNormalText").textContent = t("helpNormalText");
+    document.getElementById("helpGenericTitle").textContent = t("helpGenericTitle");
+    document.getElementById("helpGenericText").textContent = t("helpGenericText");
+    document.getElementById("helpGridTitle").textContent = t("helpGridTitle");
+    document.getElementById("helpGridText").textContent = t("helpGridText");
+    document.getElementById("helpNamingTitle").textContent = t("helpNamingTitle");
+    document.getElementById("helpNamingText").textContent = t("helpNamingText");
+    document.getElementById("helpMissTitle").textContent = t("helpMissTitle");
+    document.getElementById("helpMissText").innerHTML = t("helpMissText");
+    document.getElementById("helpTipsTitle").textContent = t("helpTipsTitle");
+    document.getElementById("helpTip1").textContent = t("helpTip1");
+    document.getElementById("helpTip2").textContent = t("helpTip2");
+    document.getElementById("helpTip3").textContent = t("helpTip3");
+    document.getElementById("helpContactTitle").textContent = t("helpContactTitle");
+    document.getElementById("helpContactText").innerHTML = t("helpContactText");
+    document.getElementById("iconCreatorButtonText").textContent = t("iconCreatorButton");
+    document.getElementById("iconToolTitle").textContent = t("iconCreatorTitle");
+    document.getElementById("iconToolBackButton").textContent = t("iconCreatorBack");
+    document.getElementById("iconToolIntro").textContent = t("iconCreatorIntro");
+    document.getElementById("iconToolNeutralTitle").textContent = t("iconNeutralTitle");
+    document.getElementById("iconToolLosingTitle").textContent = t("iconLosingTitle");
+    document.getElementById("iconToolGenerateButton").textContent = t("generateIcon");
+    document.getElementById("iconToolDownloadButton").textContent = t("downloadIcon");
+    document.getElementById("iconToolResultTitle").textContent = t("iconResultTitle");
+    document.getElementById("iconToolResultInfo").textContent = t("iconResultInfo");
+    document.getElementById("genericCreatorTitle").textContent = t("spritesheetCreatorTitle");
+    document.getElementById("genericCreatorBackButton").textContent = t("spritesheetCreatorBack");
+    document.getElementById("genericCreatorIntro").textContent = t("spritesheetCreatorIntro");
+    document.getElementById("genericCreatorGenerateButton").textContent = t("spritesheetCreatorGenerate");
+    document.getElementById("genericCreatorDownloadButton").textContent = t("spritesheetCreatorDownload");
+    document.getElementById("genericCreatorResultTitle").textContent = t("spritesheetCreatorResult");
+
+    document.getElementById("languageButton").textContent =
+        currentLanguage === "es" ? "ES" : "EN";
+
+    sections.forEach(function(section) {
+        if (section.titleElement) {
+            section.titleElement.textContent = section.titleKey
+                ? t(section.titleKey)
+                : t("sectionExtra");
+        }
+        if (section.guideElement) {
+            section.guideElement.textContent = t(section.guideKey);
+        }
+        if (section.animationNameInput) {
+            const label = section.animationNameInput.parentElement ? section.animationNameInput.parentElement.querySelector(".rename-label") : null;
+            if (label) label.textContent = t("customAnimationName");
+            section.animationNameInput.placeholder = t("customAnimationPlaceholder");
+        }
+        if (section.nameInput && !section.isSpritesheetOnly) {
+            section.nameInput.placeholder = t(section.exampleKey);
+        }
+
+        const renameLabel = section.nameInput
+            ? section.nameInput.parentElement.querySelector(".rename-label")
+            : null;
+        const renameHelp = section.nameInput
+            ? section.nameInput.parentElement.querySelector(".rename-help")
+            : null;
+        const renameButton = section.nameInput
+            ? section.nameInput.parentElement.querySelector(".rename-button")
+            : null;
+
+        if (renameLabel) renameLabel.textContent = t("renameLabel");
+        if (renameHelp) renameHelp.textContent = t("renameHelp");
+        if (renameButton) renameButton.textContent = t("renameButton");
+        if (section.clearFramesButton) section.clearFramesButton.textContent = t("clearAllFrames");
+
+        updateSectionStats(section);
+        renderFrames(section);
+    });
+
+    updateEverything();
+}
+
+
+/* =========================================================
+   CREADOR DE ICONOS
+========================================================= */
+
+let iconToolNeutralImage = null;
+let iconToolLosingImage = null;
+let iconToolGeneratedBlob = null;
+
+function loadIconToolImage(file, previewId, side) {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function() {
+        const img = new Image();
+        img.onload = function() {
+            document.getElementById(previewId).src = reader.result;
+            if (side === "neutral") {
+                iconToolNeutralImage = img;
+            } else {
+                iconToolLosingImage = img;
+            }
+            iconToolGeneratedBlob = null;
+            document.getElementById("iconToolDownloadButton").disabled = true;
+            document.getElementById("iconToolResult").style.display = "none";
+            updateIconToolState();
+        };
+        img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function updateIconToolState() {
+    const ready = !!iconToolNeutralImage && !!iconToolLosingImage;
+    document.getElementById("iconToolGenerateButton").disabled = !ready;
+    if (!ready) {
+        document.getElementById("iconToolDownloadButton").disabled = true;
+    }
+}
+
+async function generateIconToolSpritesheet() {
+    if (!iconToolNeutralImage || !iconToolLosingImage) {
+        alert(t("iconNeedBoth"));
+        return;
+    }
+
+    const canvas = document.getElementById("iconToolCanvas");
+    canvas.width = 300;
+    canvas.height = 150;
+
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, 300, 150);
+
+    // Cada icono se adapta a su celda de 150×150 conservando su proporción.
+    // No se estira ni se deforma: se escala hasta caber dentro de la celda.
+    function drawIconContained(img, cellX) {
+        const scale = Math.min(150 / img.naturalWidth, 150 / img.naturalHeight);
+        const width = img.naturalWidth * scale;
+        const height = img.naturalHeight * scale;
+        const x = cellX + (150 - width) / 2;
+        const y = (150 - height) / 2;
+        ctx.drawImage(img, x, y, width, height);
+    }
+
+    drawIconContained(iconToolNeutralImage, 0);
+    drawIconContained(iconToolLosingImage, 150);
+
+    iconToolGeneratedBlob = await new Promise(function(resolve, reject) {
+        canvas.toBlob(function(blob) {
+            if (blob) resolve(blob);
+            else reject(new Error("toBlob"));
+        }, "image/png");
+    });
+
+    document.getElementById("iconToolResult").style.display = "block";
+    document.getElementById("iconToolDownloadButton").disabled = false;
+}
+
+function downloadIconToolSpritesheet() {
+    if (!iconToolGeneratedBlob) return;
+    downloadBlob(iconToolGeneratedBlob, "icons_300x150.png");
+}
+
+/* =========================================================
+   EVENTOS
+========================================================= */
+
+document.getElementById("addNormalSectionBtn").addEventListener("click", function() {
+    createSection(null, "extraGuide", "extraExample", false, true);
+});
+
+document.getElementById("spritesheetCreatorButton").addEventListener("click", function() {
+    document.getElementById("mainCreatorPage").style.display = "none";
+    document.getElementById("genericCreatorPage").style.display = "block";
+    window.scrollTo(0, 0);
+});
+
+document.getElementById("iconCreatorButton").addEventListener("click", function() {
+    document.getElementById("mainCreatorPage").style.display = "none";
+    document.getElementById("iconToolPage").style.display = "block";
+    window.scrollTo(0, 0);
+});
+
+document.getElementById("generateBtn").addEventListener("click", generateZIP);
+
+document.getElementById("iconToolBackButton").addEventListener("click", function() {
+    document.getElementById("iconToolPage").style.display = "none";
+    document.getElementById("mainCreatorPage").style.display = "block";
+    window.scrollTo(0, 0);
+});
+
+document.getElementById("iconToolNeutralInput").addEventListener("change", function(e) {
+    loadIconToolImage(e.target.files[0], "iconToolNeutralPreview", "neutral");
+});
+
+document.getElementById("iconToolLosingInput").addEventListener("change", function(e) {
+    loadIconToolImage(e.target.files[0], "iconToolLosingPreview", "losing");
+});
+
+document.getElementById("iconToolGenerateButton").addEventListener("click", function() {
+    generateIconToolSpritesheet().catch(function(error) {
+        console.error(error);
+        alert(t("pngError"));
+    });
+});
+
+document.getElementById("iconToolDownloadButton").addEventListener("click", downloadIconToolSpritesheet);
+
+
+document.getElementById("genericCreatorBackButton").addEventListener("click", function() {
+    document.getElementById("genericCreatorPage").style.display = "none";
+    document.getElementById("mainCreatorPage").style.display = "block";
+    window.scrollTo(0, 0);
+});
+
+let genericCreatorFrames = [];
+let genericCreatorBlob = null;
+
+function renderGenericCreatorFrames() {
+    const box = document.getElementById("genericCreatorFrames");
+    const stats = document.getElementById("genericCreatorStats");
+    box.innerHTML = "";
+    if (!genericCreatorFrames.length) {
+        stats.textContent = "";
+        return;
+    }
+    const grid = getGrid(genericCreatorFrames.length);
+    stats.textContent = genericCreatorFrames.length + " " + t("spritesheetCreatorStats") + ": " + grid.columns + " × " + grid.rows;
+    genericCreatorFrames.forEach(function(frame, index) {
+        const item = document.createElement("div");
+        item.className = "generic-frame-item";
+        const img = document.createElement("img");
+        img.src = frame.objectURL;
+        img.alt = frame.file.name;
+        item.appendChild(img);
+        const name = document.createElement("div");
+        name.style.fontSize = "12px";
+        name.style.wordBreak = "break-all";
+        name.textContent = frame.file.name;
+        item.appendChild(name);
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.textContent = "✕";
+        remove.addEventListener("click", function() {
+            URL.revokeObjectURL(frame.objectURL);
+            genericCreatorFrames.splice(index, 1);
+            genericCreatorBlob = null;
+            document.getElementById("genericCreatorDownloadButton").disabled = true;
+            document.getElementById("genericCreatorResult").style.display = "none";
+            renderGenericCreatorFrames();
+        });
+        item.appendChild(remove);
+        box.appendChild(item);
+    });
+}
+
+document.getElementById("genericCreatorInput").addEventListener("change", function(e) {
+    Array.from(e.target.files || []).forEach(function(file) {
+        if (!file.type.startsWith("image/")) return;
+        const objectURL = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = function() {
+            genericCreatorFrames.push({file:file, objectURL:objectURL, image:img, width:img.naturalWidth, height:img.naturalHeight, loaded:true});
+            renderGenericCreatorFrames();
+        };
+        img.onerror = function() { URL.revokeObjectURL(objectURL); };
+        img.src = objectURL;
+    });
+    e.target.value = "";
+});
+
+document.getElementById("genericCreatorGenerateButton").addEventListener("click", async function() {
+    if (!genericCreatorFrames.length) { alert(t("spritesheetCreatorEmpty")); return; }
+    try {
+        const sheet = await buildSpritesheet(genericCreatorFrames);
+        if (!sheet) return;
+        genericCreatorBlob = sheet.blob;
+        const resultImage = document.getElementById("genericCreatorResultImage");
+        if (resultImage.dataset.url) URL.revokeObjectURL(resultImage.dataset.url);
+        const url = URL.createObjectURL(genericCreatorBlob);
+        resultImage.dataset.url = url;
+        resultImage.src = url;
+        resultImage.width = sheet.width;
+        resultImage.height = sheet.height;
+        document.getElementById("genericCreatorResultInfo").textContent = sheet.width + "×" + sheet.height + " px | " + sheet.frames.length + " frames";
+        document.getElementById("genericCreatorResult").style.display = "block";
+        document.getElementById("genericCreatorDownloadButton").disabled = false;
+    } catch (error) {
+        console.error(error);
+        alert(t("pngError"));
+    }
+});
+
+document.getElementById("genericCreatorDownloadButton").addEventListener("click", function() {
+    if (!genericCreatorBlob) return;
+    downloadBlob(genericCreatorBlob, "spritesheet.png");
+});
+
+document.getElementById("helpButton").addEventListener("click", function() {
+    document.querySelector(".container").style.display = "none";
+    document.getElementById("helpPage").style.display = "block";
+    window.scrollTo(0, 0);
+});
+
+document.getElementById("helpBackButton").addEventListener("click", function() {
+    document.getElementById("helpPage").style.display = "none";
+    document.querySelector(".container").style.display = "block";
+    window.scrollTo(0, 0);
+});
+
+document.getElementById("languageButton").addEventListener("click", function() {
+    currentLanguage = currentLanguage === "es" ? "en" : "es";
+    localStorage.setItem("spriteCreatorLanguage", currentLanguage);
+    updateLanguage();
+});
+
+
+document.getElementById("animationSelectButton").addEventListener("click", function() {
+    const menu = document.getElementById("animationSelectMenu");
+    const wasHidden = menu.style.display === "none" || !menu.style.display;
+    updateAnimationViewer();
+    menu.style.display = wasHidden ? "grid" : "none";
+});
+
+document.getElementById("animationFpsInput").addEventListener("input", function() {
+    const input = document.getElementById("animationFpsInput");
+    if (input.value.trim() === "") {
+        const section = getSelectedAnimationSection();
+        if (section) renderAnimationFrame(section);
+        return;
+    }
+    normalizeAnimationFpsInput();
+    const section = getSelectedAnimationSection();
+    if (section) {
+        renderAnimationFrame(section);
+        if (!animationViewerPlaying) startAnimationViewer();
+    }
+});
+document.getElementById("animationFpsInput").addEventListener("blur", function() {
+    normalizeAnimationFpsInput();
+    const section = getSelectedAnimationSection();
+    if (section) renderAnimationFrame(section);
+});
+
+document.getElementById("packageName").addEventListener("input", function() {
+    const input = document.getElementById("packageName");
+    const position = input.selectionStart;
+    input.value = input.value.toLowerCase();
+    try { input.setSelectionRange(position, position); } catch (e) {}
+});
+
+
+/* =========================================================
+   INICIALIZACIÓN
+========================================================= */
+
+
+createSection("idleTitle", "idleGuide", "idleExample");
+createSection("leftTitle", "leftGuide", "leftExample");
+createSection("downTitle", "downGuide", "downExample");
+createSection("upTitle", "upGuide", "upExample");
+createSection("rightTitle", "rightGuide", "rightExample");
+
+updateAnimationViewer();
+updateLanguage();
+updateEverything();
+
+</script>
+
+
+<script>
+(() => {
+    let deferredInstallPrompt = null;
+    const installButton = document.getElementById("installAppButton");
+
+    if ("serviceWorker" in navigator && location.protocol === "https:") {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(() => {});
+        });
+    }
+
+    window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        if (installButton) installButton.hidden = false;
+    });
+
+    window.addEventListener("appinstalled", () => {
+        deferredInstallPrompt = null;
+        if (installButton) installButton.hidden = true;
+    });
+
+    if (installButton) {
+        installButton.addEventListener("click", async () => {
+            if (!deferredInstallPrompt) {
+                alert("Si no aparece la instalación, abre el menú ⋮ de Chrome y selecciona «Añadir a pantalla de inicio» o «Instalar aplicación». ");
+                return;
+            }
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+        });
+    }
+})();
+</script>
+</body>
+</html>

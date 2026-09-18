@@ -735,6 +735,746 @@ h1 {
 
         #installAppButton[hidden] { display: none !important; }
         #installAppButton { cursor: pointer; }
+        .install-hint {
+            margin: 8px auto 14px;
+            max-width: 720px;
+            text-align: center;
+            font-size: 13px;
+            opacity: 0.78;
+            line-height: 1.45;
+        }
+</style>
+
+</head>
+
+<body>
+
+<div class="container" id="mainCreatorPage">
+
+    <div class="language-container">
+
+        <button
+            class="language-button"
+            id="languageButton"
+        >
+            ES
+        </button>
+
+        <button
+            class="help-button"
+            id="helpButton"
+            aria-label="Ayuda"
+        >
+            ?
+        </button>
+
+    </div>
+
+
+    <h1 id="mainTitle">
+        ELETool
+    </h1>
+
+    <div class="app-subtitle" id="appSubtitle">
+        Creador de Sprites (FNF)
+    </div>
+
+
+    <p
+        class="description"
+        id="description"
+    >
+        Esta herramienta permite crear spritesheets y archivos XML para
+        personajes de Friday Night Funkin'. Puedes subir tus frames,
+        organizarlos automáticamente, renombrarlos y generar un ZIP
+        listo para utilizar en tu juego. Fue pensado especialmente para
+        usuarios de móvil, ya que en un teléfono puede ser un poco más
+        complicado preparar sprites para el juego.
+    </p>
+
+    <button class="web-version-button" id="installAppButton" type="button" aria-label="Instalar ELETool">📱 Instalar ELETool</button>
+
+    <div class="install-hint" id="installHint">Instala ELETool en la pantalla de inicio para abrirlo como una aplicación.</div>
+
+    <div class="resolution-warning" id="resolutionWarning">
+        ⚠️ Para evitar errores, todos los frames de las secciones de animación deberían tener la misma resolución, tanto de ancho como de alto. Por ejemplo, si tus frames de Idle son 1024×1024 px, es recomendable que los frames de Left, Down, Up, Right y de las demás secciones de animación también sean 1024×1024 px. Si el ZIP no se quiere generar, tal vez se deba a que no todos los frames tienen la misma resolución.
+    </div>
+
+
+    <div id="sections"></div>
+
+
+    <div class="animation-viewer-panel" id="animationViewerPanel">
+        <h2 id="animationViewerTitle">Visor de animaciones</h2>
+        <p class="description" id="animationViewerIntro">Reproduce en bucle las animaciones de tus secciones con los FPS que elijas.</p>
+
+        <div class="animation-viewer-controls">
+            <button type="button" class="animation-select-button" id="animationSelectButton">Elegir animación</button>
+            <div class="animation-select-menu" id="animationSelectMenu" style="display:none;"></div>
+
+            <label class="animation-fps-field" for="animationFpsInput">
+                <span id="animationFpsLabel">FPS</span>
+                <input id="animationFpsInput" type="number" min="1" max="60" step="1" value="12">
+            </label>
+        </div>
+
+        <div class="animation-preview" id="animationPreview">
+            <div class="animation-empty" id="animationEmptyText">Selecciona una animación con frames para reproducirla.</div>
+            <img id="animationPreviewImage" alt="" style="display:none;">
+        </div>
+        <div class="animation-status" id="animationStatus"></div>
+    </div>
+
+
+    <div class="add-section-container">
+
+        <button
+            class="add-section-button"
+            id="addNormalSectionBtn"
+        >
+            <span class="plus-icon">+</span>
+            <span id="addNormalSectionText">
+                Agregar sección con XML y renombrado
+            </span>
+        </button>
+
+        <button
+            class="add-section-button"
+            id="spritesheetCreatorButton"
+        >
+            <span id="spritesheetCreatorButtonText">
+                Creador de Spritesheet sin XML
+            </span>
+        </button>
+
+        <button class="add-section-button" id="iconCreatorButton">
+            <span id="iconCreatorButtonText">Creado.animation-viewer-panel { background:#1b1b1b; border:1px solid #333; border-radius:12px; padding:20px; margin:20px 0; }
+.animation-viewer-panel h2 { margin:0 0 8px; }
+.animation-viewer-controls { display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin-top:16px; position:relative; }
+.animation-select-button { flex:1; min-width:220px; padding:12px 15px; border:1px solid #555; border-radius:8px; background:#333; color:#fff; font-weight:bold; cursor:pointer; text-align:left; }
+.animation-select-button:hover { background:#444; }
+.animation-select-menu { width:100%; display:grid; gap:6px; background:#151515; border:1px solid #333; border-radius:8px; padding:8px; }
+.animation-option-button { padding:11px 12px; border:1px solid #444; border-radius:7px; background:#222; color:#fff; text-align:left; cursor:pointer; }
+.animation-option-button:hover { background:#333; }
+.animation-fps-field { display:flex; flex-direction:column; gap:6px; min-width:120px; color:#ccc; font-size:14px; }
+.animation-fps-field input { width:120px; padding:11px; border:1px solid #555; border-radius:7px; background:#111; color:#fff; }
+.animation-preview { min-height:260px; margin-top:18px; background:#111; border:1px solid #333; border-radius:10px; display:flex; align-items:center; justify-content:center; overflow:hidden; padding:12px; }
+.animation-preview img { display:block; max-width:100%; max-height:520px; width:auto; height:auto; object-fit:contain; image-rendering:auto; }
+.animation-empty { color:#aaa; text-align:center; padding:30px 15px; }
+.animation-status { margin-top:10px; color:#aaa; text-align:center; font-size:14px; }
+
+.icon-creator-page { max-width: 900px; margin: 0 auto; }
+.icon-creator-topbar { display:flex; justify-content:flex-start; margin-bottom:18px; }
+.icon-creator-panel { background:#1b1b1b; border:1px solid #333; border-radius:12px; padding:20px; margin-top:18px; }
+.icon-file-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.icon-file-box { background:#151515; border:1px solid #333; border-radius:10px; padding:14px; }
+.icon-file-box h3 { margin:0 0 10px; }
+.icon-preview { display:block; width:150px; height:150px; max-width:100%; object-fit:contain; background:#181818; border:1px solid #444; margin:12px auto 0; }
+.icon-creator-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+.icon-generate-button,.icon-download-button { flex:1; min-width:220px; padding:13px 16px; border:1px solid #555; border-radius:8px; background:#333; color:white; font-size:15px; font-weight:bold; cursor:pointer; }
+.icon-generate-button:disabled,.icon-download-button:disabled { opacity:.45; cursor:not-allowed; }
+.icon-generate-button:hover:not(:disabled),.icon-download-button:hover:not(:disabled) { background:#444; }
+.icon-result { margin-top:22px; text-align:center; }
+.icon-result canvas { display:block; width:300px; height:150px; max-width:100%; border:1px solid #555; margin:12px auto; }
+.generic-creator-page { max-width: 900px; margin: 0 auto; }
+.generic-creator-panel { background:#1b1b1b; border:1px solid #333; border-radius:12px; padding:20px; margin-top:18px; }
+.generic-creator-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+.generic-creator-actions button { flex:1; min-width:220px; padding:13px 16px; border:1px solid #555; border-radius:8px; background:#333; color:#fff; font-size:15px; font-weight:bold; cursor:pointer; }
+.generic-creator-actions button:hover { background:#444; }
+.generic-frame-list { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px; margin-top:16px; }
+.generic-frame-item { position:relative; background:#151515; border:1px solid #333; border-radius:8px; padding:8px; text-align:center; }
+.generic-frame-item img { width:100%; height:120px; object-fit:contain; display:block; }
+.generic-frame-item button { margin-top:7px; padding:6px 9px; border:1px solid #555; border-radius:6px; background:#333; color:#fff; cursor:pointer; }
+.generic-result { margin-top:22px; text-align:center; }
+.generic-result img { display:block; max-width:100%; height:auto; margin:12px auto; border:1px solid #555; image-rendering:auto; }
+
+.icon-tool-page { max-width: 900px; margin: 0 auto; }
+.icon-tool-topbar { display:flex; justify-content:flex-start; margin-bottom:18px; }
+.icon-tool-panel { background:#1b1b1b; border:1px solid #333; border-radius:12px; padding:20px; margin-top:18px; }
+.icon-tool-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.icon-tool-card { background:#151515; border:1px solid #333; border-radius:10px; padding:14px; }
+.icon-tool-card h3 { margin:0 0 10px; }
+.icon-tool-card input { width:100%; }
+.icon-tool-preview { display:block; width:150px; height:150px; max-width:100%; object-fit:contain; background:#181818; border:1px solid #444; margin:12px auto 0; }
+.icon-tool-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+.icon-tool-actions button { flex:1; min-width:220px; padding:13px 16px; border:1px solid #555; border-radius:8px; background:#333; color:#fff; font-size:15px; font-weight:bold; cursor:pointer; }
+.icon-tool-actions button:disabled { opacity:.45; cursor:not-allowed; }
+.icon-tool-actions button:hover:not(:disabled) { background:#444; }
+.icon-tool-result { margin-top:22px; text-align:center; }
+.icon-tool-result canvas { display:block; width:300px; height:150px; max-width:100%; border:1px solid #555; margin:12px auto; }
+
+
+.help-section {
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 15px;
+}
+
+.help-section h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.help-section p,
+.help-section li {
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.help-section ul {
+    padding-left: 22px;
+}
+
+/* =========================
+   TÍTULO
+========================= */
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.app-subtitle {
+    margin-top: -8px;
+    margin-bottom: 14px;
+    color: #aaa;
+    font-size: 16px;
+    text-align: center;
+}
+
+.web-version-button {
+    display: block;
+    width: 100%;
+    margin: 12px 0 20px;
+    padding: 12px 16px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    background: #202020;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.web-version-button:active {
+    opacity: 0.8;
+}
+
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.65);
+    z-index: 99999;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.confirm-dialog {
+    width: min(420px, 100%);
+    background: #202020;
+    border: 1px solid #555;
+    border-radius: 12px;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.confirm-dialog p {
+    margin: 0 0 18px;
+    color: #fff;
+    line-height: 1.5;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.confirm-actions button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid #555;
+}
+
+.description {
+    text-align: center;
+    color: #ccc;
+    line-height: 1.5;
+    margin: 0 auto 25px;
+    max-width: 850px;
+}
+
+.resolution-warning {
+    margin: 14px 0 18px;
+    padding: 12px 14px;
+    background: #1b1b1b;
+    border: 1px solid #555;
+    border-radius: 8px;
+    color: #f0f0f0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+
+
+
+/* =========================
+   SECCIONES
+========================= */
+
+.section {
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.section h2 {
+    margin: 0 0 6px;
+    font-size: 21px;
+}
+
+.guide {
+    color: #aaa;
+    margin-bottom: 15px;
+}
+
+.file-input {
+    width: 100%;
+    padding: 12px;
+    background: #292929;
+    color: white;
+    border: 1px solid #444;
+    border-radius: 8px;
+}
+
+/* =========================
+   RENOMBRAR
+========================= */
+
+.rename-box {
+    margin-top: 15px;
+    padding: 15px;
+    background: #151515;
+    border-radius: 9px;
+    border: 1px solid #333;
+}
+
+.rename-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.name-input {
+    width: 100%;
+    padding: 11px;
+    background: #222;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+.rename-help {
+    color: #888;
+    font-size: 13px;
+    margin-top: 7px;
+}
+
+.rename-button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px;
+    border: 0;
+    border-radius: 7px;
+    background: #3b3b3b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.rename-button:hover {
+    background: #4a4a4a;
+}
+
+/* =========================
+   ESTADÍSTICAS
+========================= */
+
+.stats {
+    margin-top: 15px;
+    color: #bbb;
+    font-size: 14px;
+}
+
+/* =========================
+   FRAMES
+========================= */
+
+.frames {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.frame {
+    position: relative;
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.frame img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+
+    background-image:
+        linear-gradient(45deg, #333 25%, transparent 25%),
+        linear-gradient(-45deg, #333 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #333 75%),
+        linear-gradient(-45deg, transparent 75%, #333 75%);
+
+    background-size: 16px 16px;
+
+    background-position:
+        0 0,
+        0 8px,
+        8px -8px,
+        -8px 0;
+}
+
+.frame-name {
+    font-size: 12px;
+    word-break: break-all;
+    margin-top: 7px;
+    color: #ddd;
+}
+
+.frame-resolution {
+    position: absolute;
+    left: 7px;
+    top: 7px;
+    margin: 0;
+    padding: 3px 5px;
+    background: rgba(0, 0, 0, 0.78);
+    border: 1px solid #555;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 10px;
+    line-height: 1.2;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.clear-frames-button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px solid #555;
+    border-radius: 7px;
+    background: #2a2a2a;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.clear-frames-button:hover {
+    background: #3a3a3a;
+}
+
+.remove-frame {
+    position: absolute;
+
+    top: 5px;
+    right: 5px;
+
+    width: 25px;
+    height: 25px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #b3261e;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    line-height: 25px;
+    padding: 0;
+
+    cursor: pointer;
+}
+
+.remove-frame:hover {
+    background: #d32f2f;
+}
+
+/* =========================
+   ELIMINAR SECCIÓN
+========================= */
+
+.delete-section {
+    margin-top: 15px;
+    padding: 9px 13px;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: #652525;
+    color: white;
+
+    cursor: pointer;
+}
+
+/* =========================
+   AGREGAR SECCIÓN
+========================= */
+
+.add-section-container {
+    text-align: center;
+    margin: 25px 0;
+}
+
+.add-section-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    min-width: 190px;
+    min-height: 52px;
+
+    padding: 10px 18px;
+
+    border: 1px solid #555;
+    border-radius: 9px;
+
+    background: #3a3a3a;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.add-section-button:hover {
+    background: #4a4a4a;
+}
+
+.plus-icon {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #555;
+
+    border-radius: 6px;
+
+    font-size: 25px;
+    line-height: 1;
+
+    font-weight: bold;
+}
+
+/* =========================
+   CONTROLES
+========================= */
+
+.controls {
+    background: #1b1b1b;
+
+    border: 1px solid #333;
+    border-radius: 12px;
+
+    padding: 18px;
+    margin-top: 25px;
+}
+
+.controls label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-weight: bold;
+}
+
+.package-input {
+    width: 100%;
+
+    padding: 12px;
+
+    background: #222;
+    color: white;
+
+    border: 1px solid #555;
+    border-radius: 7px;
+
+    font-size: 16px;
+}
+
+.generate-button {
+    width: 100%;
+
+    padding: 14px;
+
+    margin-top: 15px;
+
+    border: 0;
+    border-radius: 8px;
+
+    background: #1976d2;
+    color: white;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.generate-button:disabled {
+    background: #444;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* =========================
+   RESUMEN
+========================= */
+
+.summary {
+    margin-top: 18px;
+
+    padding: 15px;
+
+    background: #151515;
+
+    border-radius: 8px;
+
+    color: #bbb;
+
+    line-height: 1.6;
+}
+
+/* =========================
+   MENSAJES
+========================= */
+
+.message {
+    margin-top: 15px;
+
+    padding: 12px;
+
+    border-radius: 7px;
+
+    display: none;
+
+    line-height: 1.5;
+}
+
+.message.success {
+    display: block;
+
+    background: #173b21;
+
+    border: 1px solid #285d36;
+}
+
+.message.error {
+    display: block;
+
+    background: #401b1b;
+
+    border: 1px solid #6d2929;
+}
+
+/* =========================
+   PREVIEW
+========================= */
+
+.preview-container {
+    margin-top: 25px;
+
+    background: #1b1b1b;
+
+    border: 1px solid #333;
+    border-radius: 12px;
+
+    padding: 18px;
+}
+
+.preview-container h2 {
+    margin-top: 0;
+}
+
+.preview-image {
+    display: block;
+
+    max-width: 100%;
+    max-height: 600px;
+
+    margin: 15px auto 0;
+
+    object-fit: contain;
+
+    background-image:
+        linear-gradient(45deg, #333 25%, transparent 25%),
+        linear-gradient(-45deg, #333 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #333 75%),
+        linear-gradient(-45deg, transparent 75%, #333 75%);
+
+    background-size: 20px 20px;
+
+    background-position:
+        0 0,
+        0 10px,
+        10px -10px,
+        -10px 0;
+}
+
+/* =========================
+   MÓVIL
+========================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 12px;
+    }
+
+    .frames {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    h1 {
+        font-size: 25px;
+    }
+
+}
+
+
+        #installAppButton[hidden] { display: none !important; }
+        #installAppButton { cursor: pointer; }
 </style>
 
 </head>
